@@ -103,6 +103,8 @@ document.addEventListener("keydown", (event) => {
     }
 });
 
+//TODO: bugfix
+
 function showQuestion() {
     if (!question.display) {
         ctx.font = "20px Arial";
