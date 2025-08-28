@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Information Flier</title>
+    <style>
+        body {
+            background-color: #FF6A00;
+            font-family: "Press Start 2P", cursive;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        canvas {
+            border: 8px solid #FF0000;
+            background-color: #FFE600;
+            image-rendering: pixelated;
+        }
+
+        /*!* A karakter és az akadályok színe *!*/
+        /*#gameCanvas {*/
+        /*    --character-color: #FF0000;*/
+        /*    --obstacle-color: #FF4500;*/
+        /*}*/
+    </style>
+
+    <!-- Ne felejtsd el hozzáadni a "Press Start 2P" betűtípust a HTML fájl <head> részéhez -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap">
+
+  <script type="module" crossorigin src="/SprintSolve/assets/index-CN8Fxfdw.js"></script>
+</head>
+<body>
+<canvas id="gameCanvas" style="background-color: transparent;"></canvas>
+
+
+<!-- Háttérkép -->
+<img src="/SprintSolve/assets/background-BlrSXub_.png" id="background" style="display:none;" />
+<!-- Karakter kép -->
+<img src="/SprintSolve/assets/character-N6TN8qAF.gif" id="characterImage" style="display:none;" />
+<!-- Akadály kép -->
+<img src="/SprintSolve/assets/obstacle-Qcp5ix8w.png" id="obstacleImage" style="display:none;" />
+
+</body>
+</html>
