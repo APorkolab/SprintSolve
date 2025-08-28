@@ -1,0 +1,32 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "SprintSolve is a simple, web-based educational game that combines the mechanics of a side-scrolling game (similar to Flappy Bird) with a multiple-choice quiz. The player controls a character and must navigate through obstacles that represent answers to a given question. The goal is to choose the correct answers to score points.",
+  "main": "src/main.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/APorkolab/SprintSolve.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/APorkolab/SprintSolve/issues"
+  },
+  "homepage": "https://github.com/APorkolab/SprintSolve#readme",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "vite": "^7.1.3"
+  },
+  "jest": {
+    "testEnvironment": "jest-environment-jsdom"
+  }
+}
