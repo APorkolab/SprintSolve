@@ -46,17 +46,35 @@ export function updateScore(ctx, score) {
     ctx.fillText("Pontszám: " + score.value, 10, 60);
 }
 
-export function showQuestion(ctx, question) {
-    ctx.font = "20px Arial";
-    ctx.fillStyle = "black";
-    ctx.fillText(question.text, 10, 30);
+import { wrapText } from './utils.js';
+
+export function showQuestion(ctx, question, canvas) {
+    ctx.font = "20px 'Press Start 2P'"; // Slightly smaller font for better wrapping
+    ctx.fillStyle = "white";
+    ctx.textAlign = 'center';
+
+    const maxWidth = canvas.width * 0.8; // Use 80% of canvas width for the question
+    const lineHeight = 25;
+    const x = canvas.width / 2;
+    const y = 50;
+
+    wrapText(ctx, question.text, x, y, maxWidth, lineHeight);
+
+    ctx.textAlign = 'left'; // Reset alignment
 }
 
-export function drawMessage(ctx, canvas, text) {
-    ctx.font = '24px "Press Start 2P"';
-    ctx.fillStyle = 'rgba(255, 0, 0, 1)';
+export function drawMessage(ctx, canvas, text, color = 'white') {
+    ctx.font = '30px "Press Start 2P"';
+    ctx.fillStyle = color;
     ctx.textAlign = 'center';
-    ctx.fillText(text, canvas.width / 2, canvas.height / 2 + 120);
+    // Draw a semi-transparent background for the message to make it pop
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+    const textWidth = ctx.measureText(text).width;
+    ctx.fillRect(canvas.width / 2 - textWidth / 2 - 20, canvas.height / 2 - 40, textWidth + 40, 70);
+
+    // Draw the actual text
+    ctx.fillStyle = color;
+    ctx.fillText(text, canvas.width / 2, canvas.height / 2 + 10);
     ctx.textAlign = 'left'; // Reset alignment
 }
 

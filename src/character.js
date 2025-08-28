@@ -1,44 +1,29 @@
 export const character = {
-    x: 50,
+    x: 150, // Fixed horizontal position
     y: 0, // Will be initialized later
     size: 60,
-    speed: 3,
-    gravity: 0,
-    frameIndex: 0,
-    frameCount: 0,
-    currentFrame: 0,
-    totalFrames: 49, // A GIF összes képkockájának száma
+    velocity_y: 0,
+    gravity: 0.5,
+    jump_strength: -10,
     jump: function () {
-        this.y -= this.speed;
+        this.velocity_y = this.jump_strength;
     },
-    fall: function () {
-        this.y += this.gravity;
+    draw: function (ctx, characterImage) {
+        if (!characterImage) return;
+
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        // Rotate based on vertical velocity for a more dynamic feel
+        const angle = Math.atan2(this.velocity_y, 20) * 0.3;
+        ctx.rotate(angle);
+
+        // Draw the entire GIF. The browser handles the animation.
+        ctx.drawImage(characterImage, -this.size / 2, -this.size / 2, this.size, this.size);
+
+        ctx.restore();
     },
-    draw: function (ctx) {
-        const characterImage = document.getElementById("characterImage");
-        const frameWidth = characterImage.width / this.totalFrames;
-
-        ctx.drawImage(characterImage, frameWidth * this.currentFrame, 0,
-            frameWidth,
-            characterImage.height,
-            this.x - this.size / 2, this.y - this.size / 2, this.size, this.size);
-
-        this.frameCount++;
-
-        if (this.frameCount > 10) {
-            this.frameIndex = (this.frameIndex + 1) % this.totalFrames;
-            this.frameCount = 0;
-        }
-    },
-    update: function (question) {
-        if (question.display) {
-            this.gravity = 0.5;
-        } else {
-            this.gravity = 0;
-        }
-        this.currentFrame++;
-        if (this.currentFrame >= this.totalFrames) {
-            this.currentFrame = 0;
-        }
+    update: function () {
+        this.velocity_y += this.gravity;
+        this.y += this.velocity_y;
     }
 };
