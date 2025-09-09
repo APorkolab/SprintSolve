@@ -1,39 +1,43 @@
 <!DOCTYPE html>
-<html lang="hu">
+<html lang="en" class="">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Information Flier</title>
-    <style>
-        body {
-            background-color: #FF6A00;
-            font-family: "Press Start 2P", cursive;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
-        }
+    <meta name="description" content="SprintSolve - Professional web-based educational trivia game">
+    <meta name="keywords" content="trivia, game, education, quiz, learning, interactive">
+    <meta name="author" content="SprintSolve Team">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://aporkolab.github.io/SprintSolve/">
+    <meta property="og:title" content="SprintSolve - Trivia Game">
+    <meta property="og:description" content="A dynamic, web-based trivia game that challenges your knowledge and reflexes">
+    <meta property="og:image" content="./character.png">
 
-        canvas {
-            border: 8px solid #FF0000;
-            background-color: #FFE600;
-            image-rendering: pixelated;
-        }
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://aporkolab.github.io/SprintSolve/">
+    <meta property="twitter:title" content="SprintSolve - Trivia Game">
+    <meta property="twitter:description" content="A dynamic, web-based trivia game that challenges your knowledge and reflexes">
+    <meta property="twitter:image" content="./character.png">
 
-        /*!* A karakter és az akadályok színe *!*/
-        /*#gameCanvas {*/
-        /*    --character-color: #FF0000;*/
-        /*    --obstacle-color: #FF4500;*/
-        /*}*/
-    </style>
+    <!-- Theme and app config -->
+    <meta name="theme-color" content="#FF6A00">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SprintSolve">
+    
+    <!-- Icons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/SprintSolve/assets/character-DJ7EypKR.png">
+    <link rel="apple-touch-icon" href="/SprintSolve/assets/character-DJ7EypKR.png">
+    
+    <title>SprintSolve - Educational Trivia Game</title>
+    
+    <!-- Import global styles -->
 
-    <!-- Ne felejtsd el hozzáadni a "Press Start 2P" betűtípust a HTML fájl <head> részéhez -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap">
-
-  <script type="module" crossorigin src="/SprintSolve/assets/index-M62r_fTW.js"></script>
-</head>
+  <script type="module" crossorigin src="/SprintSolve/assets/index-BMFJQZg1.js"></script>
+  <link rel="stylesheet" crossorigin href="/SprintSolve/assets/index-w1uMHpzV.css">
+<link rel="manifest" href="/SprintSolve/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/SprintSolve/registerSW.js"></script></head>
 <body>
 <canvas id="gameCanvas" style="background-color: transparent;"></canvas>
 

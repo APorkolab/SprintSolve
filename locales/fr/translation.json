@@ -1,0 +1,83 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "retry": "Réessayer",
+    "close": "Fermer",
+    "save": "Sauvegarder",
+    "cancel": "Annuler",
+    "yes": "Oui",
+    "no": "Non",
+    "continue": "Continuer",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent"
+  },
+  "game": {
+    "title": "SprintSolve",
+    "subtitle": "Testez vos connaissances à la vitesse de l'éclair !",
+    "startGame": "Commencer le Jeu",
+    "playAgain": "Rejouer",
+    "paused": "En Pause",
+    "gameOver": "Jeu Terminé",
+    "score": "Score",
+    "lives": "Vies",
+    "level": "Niveau",
+    "correct": "Correct !",
+    "incorrect": "Incorrect !",
+    "timeUp": "Temps écoulé !",
+    "finalScore": "Score Final",
+    "newHighScore": "Nouveau Record !",
+    "pressToJump": "Appuyez sur ESPACE ou touchez pour sauter",
+    "pressToContinue": "Appuyez sur P pour continuer",
+    "shieldUsed": "Bouclier Utilisé !"
+  },
+  "menu": {
+    "play": "Jouer",
+    "settings": "Paramètres",
+    "leaderboard": "Classement",
+    "achievements": "Succès",
+    "statistics": "Statistiques",
+    "about": "À Propos",
+    "credits": "Crédits",
+    "quit": "Quitter"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "audio": "Audio",
+    "graphics": "Graphiques",
+    "controls": "Contrôles",
+    "language": "Langue",
+    "theme": "Thème",
+    "difficulty": "Difficulté",
+    "volume": "Volume",
+    "soundEffects": "Effets Sonores",
+    "music": "Musique",
+    "fullscreen": "Plein Écran",
+    "notifications": "Notifications"
+  },
+  "categories": {
+    "generalKnowledge": "Culture Générale",
+    "science": "Sciences",
+    "history": "Histoire",
+    "geography": "Géographie",
+    "sports": "Sports",
+    "entertainment": "Divertissement",
+    "art": "Art et Littérature",
+    "mythology": "Mythologie",
+    "politics": "Politique",
+    "animals": "Animaux"
+  },
+  "privacy": {
+    "cookieConsent": "Nous respectons votre vie privée",
+    "cookieDescription": "Nous utilisons des cookies et technologies similaires pour améliorer votre expérience de jeu.",
+    "necessary": "Nécessaires",
+    "analytics": "Analytiques",
+    "marketing": "Marketing",
+    "preferences": "Préférences",
+    "acceptAll": "Tout Accepter",
+    "acceptNecessary": "Nécessaires Seulement",
+    "customize": "Personnaliser",
+    "privacyPolicy": "Politique de Confidentialité"
+  }
+}
