@@ -1,0 +1,317 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+/* Base styles */
+@layer base {
+  :root {
+    --color-primary: #FF6A00;
+    --color-secondary: #FFE600;
+    --color-background: #FFE600;
+    --color-border: #FF0000;
+    --color-text: #1F2937;
+    --color-success: #10B981;
+    --color-error: #EF4444;
+    --color-warning: #F59E0B;
+    --color-info: #3B82F6;
+  }
+
+  .dark {
+    --color-primary: #FF6A00;
+    --color-secondary: #FFE600;
+    --color-background: #0F1419;
+    --color-border: #FF0000;
+    --color-text: #F9FAFB;
+    --color-success: #10B981;
+    --color-error: #EF4444;
+    --color-warning: #F59E0B;
+    --color-info: #3B82F6;
+  }
+
+  html {
+    @apply antialiased scroll-smooth;
+  }
+
+  body {
+    @apply bg-secondary-500 font-ui text-gray-900 dark:bg-dark-900 dark:text-gray-100;
+    @apply overflow-hidden; /* Prevent scrolling for fullscreen game */
+    margin: 0;
+    padding: 0;
+    user-select: none; /* Prevent text selection during gameplay */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+  }
+
+  canvas {
+    @apply pixelated game-border;
+    display: block;
+    margin: 0 auto;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    @apply w-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100 dark:bg-dark-800;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-400 dark:bg-dark-600 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-500 dark:bg-dark-500;
+  }
+
+  /* Focus styles */
+  *:focus {
+    @apply outline-none ring-2 ring-primary-500 ring-opacity-50;
+  }
+
+  /* Selection styles */
+  ::selection {
+    @apply bg-primary-200 text-primary-900;
+  }
+
+  .dark ::selection {
+    @apply bg-primary-800 text-primary-100;
+  }
+}
+
+/* Component layer */
+@layer components {
+  /* Button variants */
+  .btn {
+    @apply inline-flex items-center justify-center px-4 py-2 font-medium text-sm rounded-md;
+    @apply transition-all duration-200 ease-in-out;
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply btn bg-primary-500 text-white hover:bg-primary-600 focus:ring-primary-500;
+    @apply active:bg-primary-700;
+  }
+
+  .btn-secondary {
+    @apply btn bg-gray-200 text-gray-900 hover:bg-gray-300 focus:ring-gray-500;
+    @apply dark:bg-dark-700 dark:text-gray-100 dark:hover:bg-dark-600;
+  }
+
+  .btn-game {
+    @apply font-game text-game-base px-6 py-3 bg-primary-500 text-white;
+    @apply border-2 border-red-600 hover:bg-primary-600 active:bg-primary-700;
+    @apply transform hover:scale-105 active:scale-95 transition-all duration-150;
+    @apply shadow-lg hover:shadow-xl;
+  }
+
+  .btn-icon {
+    @apply p-2 rounded-full hover:bg-gray-100 dark:hover:bg-dark-700;
+    @apply transition-colors duration-200;
+  }
+
+  /* Card styles */
+  .card {
+    @apply bg-white dark:bg-dark-800 rounded-lg shadow-md;
+    @apply border border-gray-200 dark:border-dark-700;
+  }
+
+  .card-game {
+    @apply glass-effect rounded-lg p-6;
+    @apply border-2 border-primary-500/30;
+    @apply backdrop-blur-md;
+  }
+
+  /* Input styles */
+  .input {
+    @apply block w-full px-3 py-2 border border-gray-300 rounded-md;
+    @apply placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+    @apply dark:bg-dark-800 dark:border-dark-600 dark:text-gray-100;
+    @apply transition-colors duration-200;
+  }
+
+  /* Modal styles */
+  .modal-overlay {
+    @apply fixed inset-0 z-50 flex items-center justify-center;
+    @apply bg-black bg-opacity-50 backdrop-blur-sm;
+    @apply animate-fade-in;
+  }
+
+  .modal-content {
+    @apply bg-white dark:bg-dark-800 rounded-lg shadow-xl;
+    @apply max-w-md w-full mx-4 p-6;
+    @apply animate-bounce-in;
+  }
+
+  /* Game UI specific */
+  .game-panel {
+    @apply absolute top-4 left-4 right-4;
+    @apply flex justify-between items-start;
+    @apply pointer-events-none;
+  }
+
+  .game-stats {
+    @apply glass-effect rounded-lg p-3;
+    @apply font-game text-game-sm text-white;
+    @apply pointer-events-auto;
+  }
+
+  .game-overlay {
+    @apply fixed inset-0 z-40;
+    @apply flex items-center justify-center;
+    @apply bg-black bg-opacity-75 backdrop-blur-md;
+  }
+
+  .game-menu {
+    @apply glass-effect rounded-lg p-8 max-w-md w-full mx-4;
+    @apply text-center animate-bounce-in;
+  }
+
+  /* Loading states */
+  .loading-spinner {
+    @apply animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500;
+  }
+
+  .loading-dots {
+    @apply flex space-x-1;
+  }
+
+  .loading-dot {
+    @apply h-2 w-2 bg-primary-500 rounded-full animate-pulse;
+  }
+
+  /* Toast notifications */
+  .toast {
+    @apply fixed bottom-4 right-4 z-50;
+    @apply bg-white dark:bg-dark-800 rounded-lg shadow-lg;
+    @apply border-l-4 p-4 max-w-sm;
+    @apply animate-slide-up;
+  }
+
+  .toast-success {
+    @apply toast border-l-green-500;
+  }
+
+  .toast-error {
+    @apply toast border-l-red-500;
+  }
+
+  .toast-warning {
+    @apply toast border-l-yellow-500;
+  }
+
+  .toast-info {
+    @apply toast border-l-blue-500;
+  }
+
+  /* Progress bars */
+  .progress-bar {
+    @apply w-full bg-gray-200 dark:bg-dark-700 rounded-full h-2;
+  }
+
+  .progress-fill {
+    @apply bg-primary-500 h-2 rounded-full transition-all duration-300 ease-out;
+  }
+
+  /* Accessibility helpers */
+  .sr-only {
+    @apply absolute w-px h-px p-0 -m-px overflow-hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* High contrast mode */
+  @media (prefers-contrast: high) {
+    .btn-primary {
+      @apply border-2 border-black;
+    }
+    
+    .card {
+      @apply border-2 border-gray-800;
+    }
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* Utility layer */
+@layer utilities {
+  /* Text utilities */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Layout utilities */
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1fr min(65ch, 100%) 1fr;
+  }
+
+  .content-grid > * {
+    grid-column: 2;
+  }
+
+  .full-width {
+    grid-column: 1 / -1;
+  }
+
+  /* Game specific utilities */
+  .pixelated {
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-crisp-edges;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+  }
+
+  .text-outline {
+    text-shadow: 
+      -1px -1px 0 #000,
+       1px -1px 0 #000,
+      -1px  1px 0 #000,
+       1px  1px 0 #000;
+  }
+
+  .text-outline-white {
+    text-shadow: 
+      -1px -1px 0 #fff,
+       1px -1px 0 #fff,
+      -1px  1px 0 #fff,
+       1px  1px 0 #fff;
+  }
+
+  /* Performance utilities */
+  .gpu-accelerated {
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  /* Container queries (when supported) */
+  @container (min-width: 768px) {
+    .container-md\:text-lg {
+      font-size: 1.125rem;
+      line-height: 1.75rem;
+    }
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
