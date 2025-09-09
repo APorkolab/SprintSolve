@@ -19,6 +19,7 @@ export function generateWallWithTunnels(canvas, questionState) {
     const totalWallHeight = canvas.height - totalTunnelHeight;
 
     if (totalWallHeight < 0) {
+        // eslint-disable-next-line no-console
         console.error("Not enough space for tunnels. Reduce tunnel height or number of tunnels.");
         return;
     }
@@ -36,7 +37,7 @@ export function generateWallWithTunnels(canvas, questionState) {
             width: wallWidth,
             height: wallSegmentHeight,
             isWall: true,
-            draw: function (ctx, wallImage) { // wallImage passed as argument
+            draw: function (ctx) {
                 ctx.fillStyle = wallColor;
                 ctx.fillRect(this.x, this.y, this.width, this.height);
                 // The wallImage is not suitable for the new design, so we don't draw it.

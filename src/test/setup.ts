@@ -1,3 +1,4 @@
+/* eslint-disable no-console, no-undef */
 import { vi } from 'vitest';
 
 // Mock Canvas API
@@ -98,7 +99,7 @@ global.Audio = class {
 } as any;
 
 // Mock requestAnimationFrame
-global.requestAnimationFrame = vi.fn((callback: FrameRequestCallback) => {
+global.requestAnimationFrame = vi.fn((callback: (time: number) => void) => {
   setTimeout(() => callback(performance.now()), 16);
   return 1;
 });

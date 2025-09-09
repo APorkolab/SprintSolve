@@ -1,3 +1,4 @@
+/* eslint-disable no-console, no-undef */
 import { v4 as uuidv4 } from 'uuid';
 
 // Define analytics configuration
@@ -513,5 +514,5 @@ export const analyticsService = new AnalyticsService();
 
 // Global declarations
 declare global {
-  function gtag(...args: any[]): void;
+  function gtag(command: string, ...args: any[]): void;
 }

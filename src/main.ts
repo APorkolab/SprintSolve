@@ -27,6 +27,7 @@ import { analyticsService } from './services/analyticsService';
 import './components/ConsentManager'; // Initialize consent manager
 import { i18nService, t } from './services/i18nService';
 import './components/LanguageSelector'; // Initialize language selector
+/* eslint-disable no-console */
 import type { GameAssets, DisplayMessage, PerformanceMetrics } from './types';
 
 /**
@@ -411,6 +412,7 @@ class GameEngine {
    * Update game logic
    */
   private update(deltaTime: number): void {
+    // deltaTime is available for future use in frame-rate dependent calculations
     if (!this.assets) return;
 
     switch (this.gameStore.gameState) {
@@ -453,7 +455,7 @@ class GameEngine {
 
     // Check if obstacle passed without collision (incorrect answer)
     // This is a simplified check - in production, you'd want more sophisticated logic
-    const currentObstacles = this.gameStore; // Get from store or obstacles module
+    // const currentObstacles = this.gameStore; // Get from store or obstacles module
     // Implementation depends on obstacle system...
   }
 
@@ -666,7 +668,7 @@ class GameEngine {
     this.ctx.fillStyle = 'white';
     this.ctx.textAlign = 'center';
 
-    const maxWidth = this.canvas.width * 0.8;
+    // const maxWidth = this.canvas.width * 0.8;
     const x = this.canvas.width / 2;
     const y = 50;
 

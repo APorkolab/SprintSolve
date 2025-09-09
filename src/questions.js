@@ -47,6 +47,7 @@ export async function loadCategories() {
         categories = data.trivia_categories;
         return categories;
     } catch (error) {
+        // eslint-disable-next-line no-console
         console.error("Error loading categories:", error);
         return []; // Return empty array on error
     }
@@ -72,6 +73,7 @@ export async function fetchQuestion(categoryId) {
         questionState.display = true;
 
     } catch (error) {
+        // eslint-disable-next-line no-console
         console.error("Error fetching question:", error);
         // Display an error message on the canvas
         questionState.text = "Error loading question. Please try again.";

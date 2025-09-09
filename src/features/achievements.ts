@@ -1,4 +1,5 @@
 import { useGameStore } from '@/stores/gameStore';
+/* eslint-disable no-console */
 import type { GameEvent } from '@/types';
 
 export interface Achievement {
@@ -25,7 +26,7 @@ interface AchievementDefinition {
   readonly rarity: Achievement['rarity'];
   readonly hidden: boolean;
   readonly category: Achievement['category'];
-  readonly condition: (stats: any, progress: any) => { achieved: boolean; progress: number; target: number };
+  readonly condition: (_stats: any, _progress: any) => { achieved: boolean; progress: number; target: number };
 }
 
 /**
@@ -33,7 +34,7 @@ interface AchievementDefinition {
  */
 export class AchievementSystem {
   private readonly achievements: Map<string, AchievementDefinition> = new Map();
-  private readonly eventListeners: Map<string, ((event: GameEvent) => void)[]> = new Map();
+  private readonly eventListeners: Map<string, ((_event: GameEvent) => void)[]> = new Map();
   private progressData: Record<string, any> = {};
 
   constructor() {
@@ -278,7 +279,7 @@ export class AchievementSystem {
         rarity: 'rare',
         hidden: false,
         category: 'speed',
-        condition: (stats, progress) => ({
+        condition: (_stats, progress) => ({
           achieved: (progress.maxSpeedReached || 0) >= 12,
           progress: Math.min(progress.maxSpeedReached || 0, 12),
           target: 12,
@@ -294,7 +295,7 @@ export class AchievementSystem {
         rarity: 'uncommon',
         hidden: false,
         category: 'special',
-        condition: (stats, progress) => ({
+        condition: (_stats, progress) => ({
           achieved: (progress.shieldsUsed || 0) >= 25,
           progress: Math.min(progress.shieldsUsed || 0, 25),
           target: 25,
@@ -308,7 +309,7 @@ export class AchievementSystem {
         rarity: 'epic',
         hidden: false,
         category: 'special',
-        condition: (stats, progress) => ({
+        condition: (_stats, progress) => ({
           achieved: progress.comebackAchieved || false,
           progress: progress.comebackAchieved ? 1 : 0,
           target: 1,
@@ -322,7 +323,7 @@ export class AchievementSystem {
         rarity: 'legendary',
         hidden: true,
         category: 'special',
-        condition: (stats, progress) => {
+        condition: (stats, _progress) => {
           const releaseDate = new Date('2024-01-01').getTime();
           const firstPlayDate = stats.firstPlayDate || Date.now();
           const oneDayMs = 24 * 60 * 60 * 1000;
@@ -341,7 +342,7 @@ export class AchievementSystem {
         rarity: 'uncommon',
         hidden: true,
         category: 'special',
-        condition: (stats, progress) => ({
+        condition: (_stats, progress) => ({
           achieved: progress.midnightPlayed || false,
           progress: progress.midnightPlayed ? 1 : 0,
           target: 1,
@@ -414,7 +415,7 @@ export class AchievementSystem {
 
     // Track comeback achievements
     this.addEventListener('SCORE_UPDATED', (event) => {
-      const gameStore = useGameStore.getState();
+      // const gameStore = useGameStore.getState();
       if ('score' in event && 'lives' in event) {
         if (event.lives === 1 && (event.score as number) >= 20) {
           this.progressData.comebackAchieved = true;
@@ -429,7 +430,7 @@ export class AchievementSystem {
   /**
    * Add event listener for achievement tracking
    */
-  public addEventListener(eventType: string, callback: (event: GameEvent) => void): void {
+  public addEventListener(eventType: string, callback: (_event: GameEvent) => void): void {
     if (!this.eventListeners.has(eventType)) {
       this.eventListeners.set(eventType, []);
     }

@@ -285,7 +285,7 @@ export class UIComponentSystem {
     const itemsPerRow = Math.floor((this.canvas.width - 40) / (itemWidth + 20));
     const totalWidth = itemsPerRow * itemWidth + (itemsPerRow - 1) * 20;
     const startX = (this.canvas.width - totalWidth) / 2;
-    let currentY = 140;
+    const currentY = 140;
 
     categories.forEach((category, index) => {
       const col = index % itemsPerRow;
@@ -368,7 +368,7 @@ export class UIComponentSystem {
     this.ctx.fillText(`Score: ${finalScore}`, x + panelWidth / 2, y + 90);
 
     // Statistics
-    let statsY = y + 130;
+    const statsY = y + 130;
     const statsLineHeight = 25;
     
     this.ctx.font = '16px Inter, system-ui';

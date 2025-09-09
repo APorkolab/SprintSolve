@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import type { Obstacle, Tunnel, Character, CollisionResult, Question } from '@/types';
 import { wrapText } from '@/utils';
 

@@ -1,6 +1,7 @@
 /**
  * Wraps text within a specified width and renders it with proper line breaks
  */
+/* eslint-disable no-unused-vars */
 export function wrapText(
   context: CanvasRenderingContext2D,
   text: string,

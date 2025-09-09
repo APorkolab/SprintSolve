@@ -12,11 +12,11 @@ const ctx = canvas.getContext("2d");
 
 let assets;
 let gameState = 'playing'; // Start directly in the game
-let score = { value: 0 };
+const score = { value: 0 };
 let gameSpeed = 4;
 const selectedCategoryId = 9;
 let hasShield = false;
-let displayMessage = { text: '', ttl: 0, color: 'white' };
+const displayMessage = { text: '', ttl: 0, color: 'white' };
 let collisionProcessed = false;
 let roundJustStarted = true;
 

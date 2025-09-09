@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { i18nService, SUPPORTED_LANGUAGES, SupportedLanguage, t } from '../services/i18nService';
 import { analyticsService } from '../services/analyticsService';
 
@@ -6,7 +7,7 @@ export interface LanguageSelectorConfig {
   showFlags?: boolean;
   showNames?: boolean;
   compact?: boolean;
-  onLanguageChange?: (language: SupportedLanguage) => void;
+  onLanguageChange?: (_language: SupportedLanguage) => void;
 }
 
 export class LanguageSelector {
@@ -173,17 +174,19 @@ export class LanguageSelector {
     const currentIndex = items.findIndex(item => item === document.activeElement);
     
     switch (e.key) {
-      case 'ArrowDown':
+      case 'ArrowDown': {
         e.preventDefault();
         const nextIndex = (currentIndex + 1) % items.length;
         items[nextIndex]?.focus();
         break;
+      }
         
-      case 'ArrowUp':
+      case 'ArrowUp': {
         e.preventDefault();
         const prevIndex = currentIndex <= 0 ? items.length - 1 : currentIndex - 1;
         items[prevIndex]?.focus();
         break;
+      }
         
       case 'Enter':
       case ' ':

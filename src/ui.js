@@ -101,7 +101,7 @@ export function drawCategorySelectScreen(ctx, canvas, categories) {
     // Simple pagination might be needed for many categories, but for now, we'll just display the first few.
     const displayCategories = categories.slice(0, 5);
     const totalHeight = (buttonHeight + buttonPadding) * displayCategories.length - buttonPadding;
-    let startY = (canvas.height - totalHeight) / 2;
+    const startY = (canvas.height - totalHeight) / 2;
 
     displayCategories.forEach((category, index) => {
         const y = startY + index * (buttonHeight + buttonPadding);

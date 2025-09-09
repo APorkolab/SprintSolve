@@ -1,7 +1,8 @@
+/* eslint-disable no-console */
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import type { GameState, GameStateStore, GameScore } from '@/types';
+import type { GameState, GameStateStore } from '@/types';
 
 interface GameStoreState extends GameStateStore {
   // Additional state not in the interface

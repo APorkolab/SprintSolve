@@ -1,6 +1,5 @@
 import { Howl, Howler } from 'howler';
 import type { AudioManager } from '@/types';
-import { useSettings } from '@/stores/gameStore';
 
 /**
  * Audio asset definitions
@@ -75,8 +74,10 @@ export class AudioManagerImpl implements AudioManager {
       await this.preloadEssentialSounds();
       
       this.initialized = true;
+      // eslint-disable-next-line no-console
       console.debug('Audio system initialized');
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.warn('Failed to initialize audio system:', error);
     }
   }
@@ -86,8 +87,8 @@ export class AudioManagerImpl implements AudioManager {
    */
   private async preloadEssentialSounds(): Promise<void> {
     const preloadPromises = Object.entries(AUDIO_ASSETS)
-      .filter(([_, config]) => config.preload)
-      .map(([key, _]) => this.loadSound(key as AudioAssetKey));
+      .filter(([, config]) => config.preload)
+      .map(([key]) => this.loadSound(key as AudioAssetKey));
 
     await Promise.allSettled(preloadPromises);
   }
@@ -108,7 +109,7 @@ export class AudioManagerImpl implements AudioManager {
 
     const config = AUDIO_ASSETS[key];
     
-    const loadingPromise = new Promise<void>((resolve, reject) => {
+    const loadingPromise = new Promise<void>((resolve) => {
       const sound = new Howl({
         ...config as any,
         onload: () => {
@@ -116,14 +117,16 @@ export class AudioManagerImpl implements AudioManager {
           this.loadingPromises.delete(key);
           resolve();
         },
-        onloaderror: (id, error) => {
-          console.warn(`Failed to load audio: ${key}`, error);
+        onloaderror: () => {
+          // eslint-disable-next-line no-console
+          console.warn(`Failed to load audio: ${key}`);
           this.loadingPromises.delete(key);
           // Don't reject, just resolve to prevent breaking the game
           resolve();
         },
-        onplayerror: (id, error) => {
-          console.warn(`Failed to play audio: ${key}`, error);
+        onplayerror: () => {
+          // eslint-disable-next-line no-console
+          console.warn(`Failed to play audio: ${key}`);
         },
       });
     });
@@ -159,6 +162,7 @@ export class AudioManagerImpl implements AudioManager {
 
       sound.play();
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.warn(`Failed to play sound: ${key}`, error);
     }
   }
@@ -342,18 +346,22 @@ export const audioManager = new AudioManagerImpl();
 
 // Legacy API compatibility
 export function playJumpSound(): void {
+  // eslint-disable-next-line no-console
   audioManager.playJump().catch(console.warn);
 }
 
 export function playScoreSound(): void {
+  // eslint-disable-next-line no-console
   audioManager.playScore().catch(console.warn);
 }
 
 export function playGameOverSound(): void {
+  // eslint-disable-next-line no-console
   audioManager.playGameOver().catch(console.warn);
 }
 
 export function playBackgroundMusic(): void {
+  // eslint-disable-next-line no-console
   audioManager.playBackgroundMusic().catch(console.warn);
 }
 
@@ -390,8 +398,10 @@ export class SpatialAudioManager {
       this.compressor.attack.value = 0.003;
       this.compressor.release.value = 0.25;
 
+      // eslint-disable-next-line no-console
       console.debug('Spatial audio initialized');
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.warn('Failed to initialize spatial audio:', error);
     }
   }

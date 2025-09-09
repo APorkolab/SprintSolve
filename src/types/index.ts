@@ -11,7 +11,9 @@ export interface Size {
 export interface GameObject extends Position, Size {
   readonly isWall?: boolean;
   readonly type?: string;
+  // eslint-disable-next-line no-unused-vars
   draw(ctx: CanvasRenderingContext2D, image?: HTMLImageElement): void;
+  // eslint-disable-next-line no-unused-vars  
   update(gameSpeed: number): void;
 }
 
@@ -21,6 +23,7 @@ export interface Character extends Position {
   readonly gravity: number;
   readonly jump_strength: number;
   jump(): void;
+  // eslint-disable-next-line no-unused-vars
   draw(ctx: CanvasRenderingContext2D, characterImage: HTMLImageElement): void;
   update(): void;
 }
@@ -48,6 +51,7 @@ export interface Particle extends Position {
   readonly color: string;
   ttl: number;
   update(): void;
+  // eslint-disable-next-line no-unused-vars
   draw(ctx: CanvasRenderingContext2D): void;
 }
 
@@ -113,6 +117,7 @@ export interface AudioManager {
   playGameOver(): void;
   playBackgroundMusic(): void;
   stopBackgroundMusic(): void;
+  // eslint-disable-next-line no-unused-vars
   setVolume(volume: number): void;
   mute(): void;
   unmute(): void;
@@ -127,11 +132,15 @@ export interface GameStateStore {
   selectedCategoryId: number | null;
   
   // Actions
+  // eslint-disable-next-line no-unused-vars
   setGameState: (state: GameState) => void;
   incrementScore: () => void;
   resetScore: () => void;
+  // eslint-disable-next-line no-unused-vars
   setShield: (hasShield: boolean) => void;
+  // eslint-disable-next-line no-unused-vars
   setGameSpeed: (speed: number) => void;
+  // eslint-disable-next-line no-unused-vars
   setSelectedCategory: (categoryId: number) => void;
   resetGame: () => void;
 }

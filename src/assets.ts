@@ -9,6 +9,7 @@ function loadImage(src: string): Promise<HTMLImageElement> {
     
     img.onload = () => resolve(img);
     img.onerror = (error) => {
+      // eslint-disable-next-line no-console
       console.error(`Failed to load image: ${src}`, error);
       reject(new Error(`Failed to load image: ${src}`));
     };
@@ -39,6 +40,7 @@ export async function loadGameAssets(): Promise<GameAssets> {
 
     return { background, character, obstacle };
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Failed to load game assets:', error);
     throw new Error('Failed to load game assets. Please refresh and try again.');
   }
@@ -49,22 +51,23 @@ export async function loadGameAssets(): Promise<GameAssets> {
  */
 export function preloadAsset(
   src: string,
-  onProgress?: (progress: number) => void,
+  onProgress?: (progressValue?: number) => void,
 ): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img = new Image();
     
     if (onProgress) {
       img.addEventListener('progress', (event) => {
-        if (event.lengthComputable) {
-          const progress = (event.loaded / event.total) * 100;
-          onProgress(progress);
+        if (event.lengthComputable && onProgress) {
+          const progressValue = (event.loaded / event.total) * 100;
+          onProgress(progressValue);
         }
       });
     }
     
     img.onload = () => resolve(img);
     img.onerror = (error) => {
+      // eslint-disable-next-line no-console
       console.error(`Failed to preload asset: ${src}`, error);
       reject(new Error(`Failed to preload asset: ${src}`));
     };
