@@ -125,9 +125,6 @@ const config: Config = {
     },
   },
   plugins: [
-    require('@tailwindcss/forms'),
-    require('@tailwindcss/typography'),
-    require('@tailwindcss/aspect-ratio'),
     // Custom plugin for game-specific utilities
     function({ addUtilities }: { addUtilities: any }) {
       const newUtilities = {

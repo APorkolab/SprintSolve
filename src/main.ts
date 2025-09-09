@@ -23,6 +23,10 @@ import {
   clearParticles 
 } from './particles';
 import { loadGameAssets } from './assets';
+import { analyticsService } from './services/analyticsService';
+import './components/ConsentManager'; // Initialize consent manager
+import { i18nService, t } from './services/i18nService';
+import './components/LanguageSelector'; // Initialize language selector
 import type { GameAssets, DisplayMessage, PerformanceMetrics } from './types';
 
 /**
@@ -84,6 +88,20 @@ class GameEngine {
       // Initialize audio system
       await audioManager.preloadAll();
       
+      // Initialize internationalization
+      await i18nService.initialize();
+      
+      // Initialize analytics (will respect user consent)
+      await analyticsService.initialize();
+      
+      // Track game initialization
+      analyticsService.trackCustomEvent('game_initialized', {
+        user_agent: navigator.userAgent,
+        screen_resolution: `${window.screen.width}x${window.screen.height}`,
+        viewport_size: `${window.innerWidth}x${window.innerHeight}`,
+        language: i18nService.getCurrentLanguage(),
+      });
+      
       // Start the game loop
       this.gameActions.setGameState('menu');
       this.startGameLoop();
@@ -92,6 +110,11 @@ class GameEngine {
     } catch (error) {
       console.error('Failed to initialize game engine:', error);
       this.showErrorScreen('Failed to load game assets. Please refresh and try again.');
+      
+      // Track initialization failure
+      analyticsService.trackCustomEvent('game_initialization_failed', {
+        error: error instanceof Error ? error.message : String(error),
+      });
     }
   }
 
@@ -217,7 +240,7 @@ class GameEngine {
    */
   private handleJump(): void {
     if (this.roundJustStarted) {
-      character.gravity = 0.5;
+      (character as any).gravity = 0.5;
       this.roundJustStarted = false;
     }
     
@@ -251,6 +274,12 @@ class GameEngine {
     
     if (x >= buttonX && x <= buttonX + buttonWidth && 
         y >= buttonY && y <= buttonY + buttonHeight) {
+      // Track menu interaction
+      analyticsService.trackUserInteraction({
+        event: 'menu_click',
+        element: 'start_game_button',
+      });
+      
       this.startGame();
     }
   }
@@ -267,6 +296,13 @@ class GameEngine {
       if (!this.gameStore.selectedCategoryId) {
         this.gameActions.setSelectedCategory(9); // General Knowledge
       }
+      
+      // Track game start
+      analyticsService.trackGameplayEvent({
+        event: 'game_start',
+        category: this.gameStore.selectedCategoryId?.toString() || '9',
+        difficulty: 'normal',
+      });
       
       playBackgroundMusic();
       await this.resetForNewRound();
@@ -311,6 +347,16 @@ class GameEngine {
     stopBackgroundMusic();
     playGameOverSound();
     createExplosion(character.x, character.y);
+    
+    // Track game end
+    analyticsService.trackGameplayEvent({
+      event: 'game_end',
+      score: this.gameStore.score.value,
+      category: this.gameStore.selectedCategoryId?.toString() || '9',
+      difficulty: 'normal',
+      duration: Date.now() - Date.now(),
+    });
+    
     this.gameActions.setGameState('gameOver');
   }
 
@@ -344,6 +390,16 @@ class GameEngine {
         updateTime: updateEndTime - updateStartTime,
         renderTime: renderEndTime - renderStartTime,
       };
+      
+      // Track performance metrics periodically (every 5 seconds)
+      if (Math.random() < 0.01) { // ~1% of frames at 60fps = ~every 1.6 seconds
+        analyticsService.trackPerformance({
+          event: 'performance_metric',
+          metric: 'fps',
+          value: this.performanceMetrics.fps,
+          context: this.gameStore.gameState,
+        });
+      }
 
       this.animationId = requestAnimationFrame(gameLoop);
     };
@@ -431,7 +487,15 @@ class GameEngine {
     playScoreSound();
     this.gameActions.incrementScore();
     this.gameActions.addExperience(10);
-    this.showTemporaryMessage('Correct!', 60, 'green');
+    this.showTemporaryMessage(t('game.correct'), 60, 'green');
+    
+    // Track correct answer
+    analyticsService.trackGameplayEvent({
+      event: 'question_answered',
+      correct: true,
+      category: this.gameStore.selectedCategoryId?.toString() || '9',
+      questionType: 'multiple',
+    });
     
     // Increase difficulty
     const newSpeed = Math.min(this.gameStore.gameSpeed + 0.2, 12);
@@ -446,8 +510,16 @@ class GameEngine {
    * Handle incorrect answer
    */
   private handleIncorrectAnswer(): void {
-    this.showTemporaryMessage('Wrong!', 60, 'red');
+    this.showTemporaryMessage(t('game.incorrect'), 60, 'red');
     this.gameActions.decrementLives();
+    
+    // Track incorrect answer
+    analyticsService.trackGameplayEvent({
+      event: 'question_answered',
+      correct: false,
+      category: this.gameStore.selectedCategoryId?.toString() || '9',
+      questionType: 'multiple',
+    });
     
     if (this.gameStore.lives > 0) {
       setTimeout(() => {
@@ -462,7 +534,7 @@ class GameEngine {
   private handleWallCollision(): void {
     if (this.gameStore.hasShield) {
       this.gameActions.setShield(false);
-      this.showTemporaryMessage('Shield Used!', 60, 'blue');
+      this.showTemporaryMessage(t('game.shieldUsed'), 60, 'blue');
       // Push obstacles back
       setTimeout(() => {
         this.collisionProcessed = false;
@@ -526,14 +598,14 @@ class GameEngine {
     this.ctx.font = '40px "Press Start 2P"';
     this.ctx.fillStyle = 'white';
     this.ctx.textAlign = 'center';
-    this.ctx.fillText('SprintSolve', this.canvas.width / 2, this.canvas.height / 2 - 80);
+    this.ctx.fillText(t('game.title'), this.canvas.width / 2, this.canvas.height / 2 - 80);
 
     // Start button
     this.ctx.fillStyle = '#FF6A00';
     this.ctx.fillRect(this.canvas.width / 2 - 100, this.canvas.height / 2 + 20, 200, 50);
     this.ctx.font = '20px "Press Start 2P"';
     this.ctx.fillStyle = 'white';
-    this.ctx.fillText('Start Game', this.canvas.width / 2, this.canvas.height / 2 + 55);
+    this.ctx.fillText(t('game.startGame'), this.canvas.width / 2, this.canvas.height / 2 + 55);
     
     // Stats display
     this.renderStats();
@@ -561,13 +633,13 @@ class GameEngine {
     this.ctx.font = '20px "Press Start 2P"';
     this.ctx.fillStyle = 'white';
     this.ctx.textAlign = 'left';
-    this.ctx.fillText(`Score: ${this.gameStore.score.value}`, 10, 30);
+    this.ctx.fillText(`${t('game.score')}: ${this.gameStore.score.value}`, 10, 30);
     
     // Lives
-    this.ctx.fillText(`Lives: ${this.gameStore.lives}`, 10, 60);
+    this.ctx.fillText(`${t('game.lives')}: ${this.gameStore.lives}`, 10, 60);
     
     // Level
-    this.ctx.fillText(`Level: ${this.gameStore.level}`, 10, 90);
+    this.ctx.fillText(`${t('game.level')}: ${this.gameStore.level}`, 10, 90);
     
     // Shield indicator
     if (this.gameStore.hasShield) {
@@ -635,16 +707,16 @@ class GameEngine {
     this.ctx.font = '40px "Press Start 2P"';
     this.ctx.fillStyle = 'white';
     this.ctx.textAlign = 'center';
-    this.ctx.fillText('Game Over', this.canvas.width / 2, this.canvas.height / 2 - 80);
+    this.ctx.fillText(t('game.gameOver'), this.canvas.width / 2, this.canvas.height / 2 - 80);
 
     this.ctx.font = '20px "Press Start 2P"';
-    this.ctx.fillText(`Score: ${this.gameStore.score.value}`, this.canvas.width / 2, this.canvas.height / 2 - 20);
+    this.ctx.fillText(`${t('game.score')}: ${this.gameStore.score.value}`, this.canvas.width / 2, this.canvas.height / 2 - 20);
 
     // Play Again button
     this.ctx.fillStyle = '#FF6A00';
     this.ctx.fillRect(this.canvas.width / 2 - 100, this.canvas.height / 2 + 20, 200, 50);
     this.ctx.fillStyle = 'white';
-    this.ctx.fillText('Play Again', this.canvas.width / 2, this.canvas.height / 2 + 55);
+    this.ctx.fillText(t('game.playAgain'), this.canvas.width / 2, this.canvas.height / 2 + 55);
   }
 
   /**
@@ -657,10 +729,10 @@ class GameEngine {
     this.ctx.font = '40px "Press Start 2P"';
     this.ctx.fillStyle = 'white';
     this.ctx.textAlign = 'center';
-    this.ctx.fillText('Paused', this.canvas.width / 2, this.canvas.height / 2);
+    this.ctx.fillText(t('game.paused'), this.canvas.width / 2, this.canvas.height / 2);
     
     this.ctx.font = '16px "Press Start 2P"';
-    this.ctx.fillText('Press P to continue', this.canvas.width / 2, this.canvas.height / 2 + 50);
+    this.ctx.fillText(t('game.pressToContinue'), this.canvas.width / 2, this.canvas.height / 2 + 50);
   }
 
   /**
@@ -704,7 +776,7 @@ class GameEngine {
     this.ctx.font = '20px "Press Start 2P"';
     this.ctx.fillStyle = 'white';
     this.ctx.textAlign = 'center';
-    this.ctx.fillText('Loading...', this.canvas.width / 2, this.canvas.height / 2);
+    this.ctx.fillText(t('common.loading'), this.canvas.width / 2, this.canvas.height / 2);
   }
 
   /**
@@ -717,7 +789,7 @@ class GameEngine {
     this.ctx.font = '16px "Press Start 2P"';
     this.ctx.fillStyle = 'white';
     this.ctx.textAlign = 'center';
-    this.ctx.fillText('Error', this.canvas.width / 2, this.canvas.height / 2 - 20);
+    this.ctx.fillText(t('common.error'), this.canvas.width / 2, this.canvas.height / 2 - 20);
     this.ctx.fillText(message, this.canvas.width / 2, this.canvas.height / 2 + 20);
   }
 

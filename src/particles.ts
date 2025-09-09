@@ -251,5 +251,5 @@ const legacyDrawParticles = (ctx: CanvasRenderingContext2D): void => {
 };
 
 // Export legacy functions
-export { legacyUpdateParticles as updateParticles };
-export { legacyDrawParticles as drawParticles };
+// Export legacy functions with different names to avoid conflicts
+export { legacyUpdateParticles, legacyDrawParticles };

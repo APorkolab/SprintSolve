@@ -1,0 +1,83 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "retry": "Reintentar",
+    "close": "Cerrar",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "yes": "Sí",
+    "no": "No",
+    "continue": "Continuar",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "previous": "Anterior"
+  },
+  "game": {
+    "title": "SprintSolve",
+    "subtitle": "¡Pon a prueba tus conocimientos a la velocidad del rayo!",
+    "startGame": "Comenzar Juego",
+    "playAgain": "Jugar de Nuevo",
+    "paused": "Pausado",
+    "gameOver": "Fin del Juego",
+    "score": "Puntuación",
+    "lives": "Vidas",
+    "level": "Nivel",
+    "correct": "¡Correcto!",
+    "incorrect": "¡Incorrecto!",
+    "timeUp": "¡Se acabó el tiempo!",
+    "finalScore": "Puntuación Final",
+    "newHighScore": "¡Nueva Puntuación Máxima!",
+    "pressToJump": "Presiona ESPACIO o toca para saltar",
+    "pressToContinue": "Presiona P para continuar",
+    "shieldUsed": "¡Escudo Usado!"
+  },
+  "menu": {
+    "play": "Jugar",
+    "settings": "Configuración",
+    "leaderboard": "Tabla de Líderes",
+    "achievements": "Logros",
+    "statistics": "Estadísticas",
+    "about": "Acerca de",
+    "credits": "Créditos",
+    "quit": "Salir"
+  },
+  "settings": {
+    "title": "Configuración",
+    "audio": "Audio",
+    "graphics": "Gráficos",
+    "controls": "Controles",
+    "language": "Idioma",
+    "theme": "Tema",
+    "difficulty": "Dificultad",
+    "volume": "Volumen",
+    "soundEffects": "Efectos de Sonido",
+    "music": "Música",
+    "fullscreen": "Pantalla Completa",
+    "notifications": "Notificaciones"
+  },
+  "categories": {
+    "generalKnowledge": "Conocimiento General",
+    "science": "Ciencia",
+    "history": "Historia",
+    "geography": "Geografía",
+    "sports": "Deportes",
+    "entertainment": "Entretenimiento",
+    "art": "Arte y Literatura",
+    "mythology": "Mitología",
+    "politics": "Política",
+    "animals": "Animales"
+  },
+  "privacy": {
+    "cookieConsent": "Valoramos tu privacidad",
+    "cookieDescription": "Utilizamos cookies y tecnologías similares para mejorar tu experiencia de juego.",
+    "necessary": "Necesarias",
+    "analytics": "Analíticas",
+    "marketing": "Marketing",
+    "preferences": "Preferencias",
+    "acceptAll": "Aceptar Todo",
+    "acceptNecessary": "Solo Necesarias",
+    "customize": "Personalizar",
+    "privacyPolicy": "Política de Privacidad"
+  }
+}

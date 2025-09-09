@@ -69,7 +69,7 @@ export class AudioManagerImpl implements AudioManager {
     try {
       // Set global Howler settings
       Howler.volume(this.masterVolume);
-      Howler.html5PoolSize(10);
+      (Howler as any).html5PoolSize(10);
       
       // Preload essential sounds
       await this.preloadEssentialSounds();
@@ -110,7 +110,7 @@ export class AudioManagerImpl implements AudioManager {
     
     const loadingPromise = new Promise<void>((resolve, reject) => {
       const sound = new Howl({
-        ...config,
+        ...config as any,
         onload: () => {
           this.sounds.set(key, sound);
           this.loadingPromises.delete(key);

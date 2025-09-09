@@ -1,0 +1,208 @@
+/* RTL (Right-to-Left) Language Support */
+/* This file provides styles for Arabic, Hebrew and other RTL languages */
+
+/* RTL body styles */
+.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+/* RTL game UI adjustments */
+.rtl .game-ui {
+  flex-direction: row-reverse;
+}
+
+.rtl .score-display,
+.rtl .lives-display,
+.rtl .level-display {
+  text-align: right;
+}
+
+/* RTL consent banner */
+.rtl .consent-banner {
+  direction: rtl;
+}
+
+.rtl .consent-content {
+  flex-direction: row-reverse;
+}
+
+.rtl .consent-actions {
+  justify-content: flex-start;
+  flex-direction: row-reverse;
+}
+
+.rtl .consent-text {
+  text-align: right;
+}
+
+/* RTL modal styles */
+.rtl .consent-modal {
+  direction: rtl;
+}
+
+.rtl .modal-header {
+  flex-direction: row-reverse;
+}
+
+.rtl .modal-actions {
+  justify-content: flex-start;
+  flex-direction: row-reverse;
+}
+
+.rtl .preference-group {
+  text-align: right;
+}
+
+.rtl .preference-label {
+  flex-direction: row-reverse;
+}
+
+.rtl .preference-description {
+  margin-left: 0;
+  margin-right: 1.5rem;
+  text-align: right;
+}
+
+/* RTL language selector */
+.rtl .language-selector.top-right {
+  right: auto;
+  left: 1rem;
+}
+
+.rtl .language-selector.top-left {
+  left: auto;
+  right: 1rem;
+}
+
+.rtl .language-selector.bottom-right {
+  right: auto;
+  left: 1rem;
+}
+
+.rtl .language-selector.bottom-left {
+  left: auto;
+  right: 1rem;
+}
+
+.rtl .language-dropdown {
+  right: auto;
+  left: 0;
+}
+
+.rtl .language-item {
+  text-align: right;
+  flex-direction: row-reverse;
+}
+
+.rtl .current-language-btn {
+  flex-direction: row-reverse;
+}
+
+/* RTL canvas text alignment */
+.rtl canvas {
+  direction: rtl;
+}
+
+/* RTL-specific font improvements for Arabic/Hebrew */
+.rtl .arabic-text {
+  font-family: 'Noto Sans Arabic', 'Press Start 2P', monospace;
+  font-feature-settings: 'liga', 'calt', 'kern';
+}
+
+.rtl .hebrew-text {
+  font-family: 'Noto Sans Hebrew', 'Press Start 2P', monospace;
+  font-feature-settings: 'liga', 'calt', 'kern';
+}
+
+/* RTL responsive adjustments */
+@media (max-width: 768px) {
+  .rtl .consent-content {
+    flex-direction: column;
+    text-align: right;
+  }
+
+  .rtl .consent-actions {
+    justify-content: center;
+    flex-direction: row-reverse;
+  }
+
+  .rtl .language-selector.top-right,
+  .rtl .language-selector.top-left {
+    right: 0.5rem;
+    left: auto;
+  }
+}
+
+/* Ensure proper alignment for mixed content */
+.rtl .mixed-content {
+  unicode-bidi: plaintext;
+}
+
+/* RTL number formatting */
+.rtl .number {
+  unicode-bidi: embed;
+  direction: ltr;
+}
+
+/* RTL animations */
+.rtl .slide-in-right {
+  animation: rtl-slide-in-right 0.3s ease-out;
+}
+
+.rtl .slide-in-left {
+  animation: rtl-slide-in-left 0.3s ease-out;
+}
+
+@keyframes rtl-slide-in-right {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes rtl-slide-in-left {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* RTL loading indicators */
+.rtl .loading-spinner {
+  transform: scaleX(-1);
+}
+
+/* RTL form elements */
+.rtl input,
+.rtl textarea,
+.rtl select {
+  text-align: right;
+  direction: rtl;
+}
+
+.rtl input[type="checkbox"],
+.rtl input[type="radio"] {
+  margin-left: 0.5rem;
+  margin-right: 0;
+}
+
+/* RTL tooltips */
+.rtl .tooltip {
+  right: 0;
+  left: auto;
+  text-align: right;
+}
+
+.rtl .tooltip:before {
+  right: 1rem;
+  left: auto;
+}
