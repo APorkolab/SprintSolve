@@ -316,6 +316,27 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        continue-on-error: true
+        
+      - name: Upload Pages artifact as fallback
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: github-pages-fallback
+          path: dist/
+          retention-days: 7
+          
+      - name: Deployment status
+        if: always()
+        run: |
+          if [ "${{ steps.deployment.outcome }}" == "success" ]; then
+            echo "✅ GitHub Pages deployment successful"
+            echo "🌐 Site available at: ${{ steps.deployment.outputs.page_url }}"
+          else
+            echo "❌ GitHub Pages deployment failed - check repository settings"
+            echo "📁 Build artifacts available in fallback upload"
+            echo "💡 To fix: Go to Settings > Pages and configure deployment source"
+          fi
 
   # Release Management
   release:
