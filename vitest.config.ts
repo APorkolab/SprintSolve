@@ -5,6 +5,8 @@ export default defineConfig({
   test: {
     environment: 'happy-dom',
     globals: true,
+    // Fix crypto.getRandomValues issues
+    pool: 'forks',
     include: ['tests/unit/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}', 'src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     exclude: ['tests/e2e/**/*', '**/*.e2e.*'],
     setupFiles: ['./src/test/setup.ts'],
@@ -27,12 +29,6 @@ export default defineConfig({
           lines: 85,
           statements: 85,
         },
-      },
-    },
-    pool: 'threads',
-    poolOptions: {
-      threads: {
-        singleThread: false,
       },
     },
   },

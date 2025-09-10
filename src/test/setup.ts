@@ -1,5 +1,11 @@
 /* eslint-disable no-console, no-undef */
 import { vi } from 'vitest';
+import { webcrypto } from 'node:crypto';
+
+// Polyfill crypto.getRandomValues for Node.js environments
+if (typeof globalThis.crypto === 'undefined') {
+  globalThis.crypto = webcrypto as Crypto;
+}
 
 // Mock Canvas API
 const createMockContext = (): Partial<CanvasRenderingContext2D> => ({
