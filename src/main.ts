@@ -69,6 +69,9 @@ class GameEngine {
 
     this.setupCanvas();
     this.setupEventListeners();
+    
+    // Show loading screen immediately
+    this.showLoadingScreen();
 
     // Subscribe to store changes
     useGameStore.subscribe(state => {
@@ -871,13 +874,26 @@ class GameEngine {
     this.ctx.fillStyle = 'black';
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-    this.ctx.font = '20px "Press Start 2P"';
+    // Use fallback fonts and text for better compatibility
+    this.ctx.font = '20px "Press Start 2P", monospace, sans-serif';
     this.ctx.fillStyle = 'white';
     this.ctx.textAlign = 'center';
+    
+    // Use fallback text if i18n is not ready
+    const loadingText = typeof t === 'function' ? t('common.loading') : 'Loading...';
     this.ctx.fillText(
-      t('common.loading'),
+      loadingText,
       this.canvas.width / 2,
       this.canvas.height / 2,
+    );
+    
+    // Add SprintSolve title
+    this.ctx.font = '32px "Press Start 2P", monospace, sans-serif';
+    this.ctx.fillStyle = '#FF6A00';
+    this.ctx.fillText(
+      'SprintSolve',
+      this.canvas.width / 2,
+      this.canvas.height / 2 - 60,
     );
   }
 

@@ -1,0 +1,43 @@
+{
+  "ci": {
+    "collect": {
+      "staticDistDir": "./dist",
+      "numberOfRuns": 1,
+      "settings": {
+        "chromeFlags": [
+          "--headless=new",
+          "--no-sandbox", 
+          "--disable-dev-shm-usage",
+          "--disable-gpu",
+          "--disable-features=TranslateUI",
+          "--disable-extensions",
+          "--disable-background-timer-throttling",
+          "--disable-backgrounding-occluded-windows",
+          "--disable-renderer-backgrounding",
+          "--run-all-compositor-stages-before-draw",
+          "--disable-ipc-flooding-protection"
+        ],
+        "maxWaitForFcp": 60000,
+        "maxWaitForLoad": 60000
+      }
+    },
+    "assert": {
+      "assertMatrix": [
+        {
+          "matchingUrlPattern": ".*",
+          "assertions": {
+            "first-contentful-paint": "off",
+            "largest-contentful-paint": "off", 
+            "cumulative-layout-shift": "off",
+            "total-blocking-time": "off",
+            "speed-index": "off",
+            "interactive": "off"
+          }
+        }
+      ]
+    },
+    "upload": {
+      "target": "temporary-public-storage"
+    }
+  }
+}
