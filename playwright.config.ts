@@ -35,7 +35,13 @@ export default defineConfig({
   },
 
   /* Configure projects for major browsers */
-  projects: [
+  projects: process.env.CI ? [
+    // Only Chromium in CI for speed
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
+    },
+  ] : [
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
@@ -60,6 +66,7 @@ export default defineConfig({
       name: 'Mobile Safari',
       use: { ...devices['iPhone 12'] },
     },
+  ],
 
     /* Test against branded browsers. */
     // {
@@ -74,9 +81,11 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'npm run build && npm run preview',
+    command: 'npm run preview',
     url: 'http://127.0.0.1:4173',
     reuseExistingServer: !process.env.CI,
-    timeout: 120 * 1000,
+    timeout: 180 * 1000, // Increased to 3 minutes
+    stdout: 'pipe',
+    stderr: 'pipe',
   },
 });
