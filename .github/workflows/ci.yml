@@ -202,6 +202,7 @@ jobs:
           retention-days: 30
 
       - name: Bundle size check
+        if: github.event_name == 'pull_request'
         uses: andresz1/size-limit-action@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
