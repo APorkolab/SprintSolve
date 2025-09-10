@@ -15,7 +15,13 @@ export interface Achievement {
   };
   readonly unlocked: boolean;
   readonly unlockedAt?: number;
-  readonly category: 'score' | 'accuracy' | 'speed' | 'persistence' | 'exploration' | 'special';
+  readonly category:
+    | 'score'
+    | 'accuracy'
+    | 'speed'
+    | 'persistence'
+    | 'exploration'
+    | 'special';
 }
 
 interface AchievementDefinition {
@@ -26,7 +32,10 @@ interface AchievementDefinition {
   readonly rarity: Achievement['rarity'];
   readonly hidden: boolean;
   readonly category: Achievement['category'];
-  readonly condition: (_stats: any, _progress?: any) => { achieved: boolean; progress: number; target: number };
+  readonly condition: (
+    _stats: any,
+    _progress?: any,
+  ) => { achieved: boolean; progress: number; target: number };
 }
 
 /**
@@ -34,7 +43,10 @@ interface AchievementDefinition {
  */
 export class AchievementSystem {
   private readonly achievements: Map<string, AchievementDefinition> = new Map();
-  private readonly eventListeners: Map<string, ((_event: GameEvent) => void)[]> = new Map();
+  private readonly eventListeners: Map<
+    string,
+    ((_event: GameEvent) => void)[]
+  > = new Map();
   private progressData: Record<string, any> = {};
 
   constructor() {
@@ -57,7 +69,7 @@ export class AchievementSystem {
         rarity: 'common',
         hidden: false,
         category: 'score',
-        condition: (stats) => ({
+        condition: stats => ({
           achieved: stats.totalScore >= 1,
           progress: Math.min(stats.totalScore, 1),
           target: 1,
@@ -71,7 +83,7 @@ export class AchievementSystem {
         rarity: 'common',
         hidden: false,
         category: 'score',
-        condition: (stats) => ({
+        condition: stats => ({
           achieved: stats.bestScore >= 10,
           progress: Math.min(stats.bestScore, 10),
           target: 10,
@@ -85,7 +97,7 @@ export class AchievementSystem {
         rarity: 'uncommon',
         hidden: false,
         category: 'score',
-        condition: (stats) => ({
+        condition: stats => ({
           achieved: stats.bestScore >= 25,
           progress: Math.min(stats.bestScore, 25),
           target: 25,
@@ -99,7 +111,7 @@ export class AchievementSystem {
         rarity: 'uncommon',
         hidden: false,
         category: 'score',
-        condition: (stats) => ({
+        condition: stats => ({
           achieved: stats.bestScore >= 50,
           progress: Math.min(stats.bestScore, 50),
           target: 50,
@@ -113,7 +125,7 @@ export class AchievementSystem {
         rarity: 'rare',
         hidden: false,
         category: 'score',
-        condition: (stats) => ({
+        condition: stats => ({
           achieved: stats.bestScore >= 100,
           progress: Math.min(stats.bestScore, 100),
           target: 100,
@@ -127,7 +139,7 @@ export class AchievementSystem {
         rarity: 'epic',
         hidden: false,
         category: 'score',
-        condition: (stats) => ({
+        condition: stats => ({
           achieved: stats.bestScore >= 250,
           progress: Math.min(stats.bestScore, 250),
           target: 250,
@@ -141,7 +153,7 @@ export class AchievementSystem {
         rarity: 'legendary',
         hidden: false,
         category: 'score',
-        condition: (stats) => ({
+        condition: stats => ({
           achieved: stats.bestScore >= 500,
           progress: Math.min(stats.bestScore, 500),
           target: 500,
@@ -171,12 +183,17 @@ export class AchievementSystem {
         rarity: 'rare',
         hidden: false,
         category: 'accuracy',
-        condition: (stats) => {
-          const accuracy = stats.totalQuestionsAnswered > 0 ? 
-            (stats.correctAnswers / stats.totalQuestionsAnswered) * 100 : 0;
+        condition: stats => {
+          const accuracy =
+            stats.totalQuestionsAnswered > 0
+              ? (stats.correctAnswers / stats.totalQuestionsAnswered) * 100
+              : 0;
           return {
             achieved: accuracy >= 90 && stats.totalQuestionsAnswered >= 20,
-            progress: stats.totalQuestionsAnswered >= 20 ? accuracy : stats.totalQuestionsAnswered,
+            progress:
+              stats.totalQuestionsAnswered >= 20
+                ? accuracy
+                : stats.totalQuestionsAnswered,
             target: stats.totalQuestionsAnswered >= 20 ? 90 : 20,
           };
         },
@@ -191,7 +208,7 @@ export class AchievementSystem {
         rarity: 'common',
         hidden: false,
         category: 'persistence',
-        condition: (stats) => ({
+        condition: stats => ({
           achieved: stats.totalGamesPlayed >= 10,
           progress: Math.min(stats.totalGamesPlayed, 10),
           target: 10,
@@ -205,7 +222,7 @@ export class AchievementSystem {
         rarity: 'uncommon',
         hidden: false,
         category: 'persistence',
-        condition: (stats) => ({
+        condition: stats => ({
           achieved: stats.totalGamesPlayed >= 50,
           progress: Math.min(stats.totalGamesPlayed, 50),
           target: 50,
@@ -219,7 +236,7 @@ export class AchievementSystem {
         rarity: 'rare',
         hidden: false,
         category: 'persistence',
-        condition: (stats) => ({
+        condition: stats => ({
           achieved: stats.totalGamesPlayed >= 100,
           progress: Math.min(stats.totalGamesPlayed, 100),
           target: 100,
@@ -233,7 +250,7 @@ export class AchievementSystem {
         rarity: 'uncommon',
         hidden: false,
         category: 'persistence',
-        condition: (stats) => ({
+        condition: stats => ({
           achieved: stats.playTime >= 3600,
           progress: Math.min(stats.playTime, 3600),
           target: 3600,
@@ -249,7 +266,7 @@ export class AchievementSystem {
         rarity: 'uncommon',
         hidden: false,
         category: 'exploration',
-        condition: (stats) => ({
+        condition: stats => ({
           achieved: stats.categoriesPlayed.length >= 5,
           progress: Math.min(stats.categoriesPlayed.length, 5),
           target: 5,
@@ -263,7 +280,7 @@ export class AchievementSystem {
         rarity: 'rare',
         hidden: false,
         category: 'exploration',
-        condition: (stats) => ({
+        condition: stats => ({
           achieved: stats.categoriesPlayed.length >= 10,
           progress: Math.min(stats.categoriesPlayed.length, 10),
           target: 10,
@@ -323,7 +340,7 @@ export class AchievementSystem {
         rarity: 'legendary',
         hidden: true,
         category: 'special',
-        condition: (stats) => {
+        condition: stats => {
           const releaseDate = new Date('2024-01-01').getTime();
           const firstPlayDate = stats.firstPlayDate || Date.now();
           const oneDayMs = 24 * 60 * 60 * 1000;
@@ -356,7 +373,7 @@ export class AchievementSystem {
         rarity: 'epic',
         hidden: false,
         category: 'persistence',
-        condition: (stats) => ({
+        condition: stats => ({
           achieved: stats.correctAnswers >= 1000,
           progress: Math.min(stats.correctAnswers, 1000),
           target: 1000,
@@ -378,7 +395,7 @@ export class AchievementSystem {
     let currentStreak = 0;
     let maxStreak = this.progressData.maxStreak || 0;
 
-    this.addEventListener('QUESTION_ANSWERED', (event) => {
+    this.addEventListener('QUESTION_ANSWERED', event => {
       if ('correct' in event && event.correct) {
         currentStreak++;
         maxStreak = Math.max(maxStreak, currentStreak);
@@ -389,19 +406,20 @@ export class AchievementSystem {
     });
 
     // Track maximum speed reached
-    this.addEventListener('SPEED_INCREASED', (event) => {
+    this.addEventListener('SPEED_INCREASED', event => {
       if ('speed' in event) {
         this.progressData.maxSpeedReached = Math.max(
           this.progressData.maxSpeedReached || 0,
-          event.speed as number
+          event.speed as number,
         );
       }
     });
 
     // Track shield usage
-    this.addEventListener('POWERUP_COLLECTED', (event) => {
+    this.addEventListener('POWERUP_COLLECTED', event => {
       if ('powerupType' in event && event.powerupType === 'shield') {
-        this.progressData.shieldsUsed = (this.progressData.shieldsUsed || 0) + 1;
+        this.progressData.shieldsUsed =
+          (this.progressData.shieldsUsed || 0) + 1;
       }
     });
 
@@ -414,7 +432,7 @@ export class AchievementSystem {
     });
 
     // Track comeback achievements
-    this.addEventListener('SCORE_UPDATED', (event) => {
+    this.addEventListener('SCORE_UPDATED', event => {
       // const gameStore = useGameStore.getState();
       if ('score' in event && 'lives' in event) {
         if (event.lives === 1 && (event.score as number) >= 20) {
@@ -430,7 +448,10 @@ export class AchievementSystem {
   /**
    * Add event listener for achievement tracking
    */
-  public addEventListener(eventType: string, callback: (_event: GameEvent) => void): void {
+  public addEventListener(
+    eventType: string,
+    callback: (_event: GameEvent) => void,
+  ): void {
     if (!this.eventListeners.has(eventType)) {
       this.eventListeners.set(eventType, []);
     }
@@ -462,10 +483,10 @@ export class AchievementSystem {
 
     for (const [id, definition] of this.achievements.entries()) {
       const isAlreadyUnlocked = unlockedAchievements.includes(id);
-      
+
       if (!isAlreadyUnlocked) {
         const result = definition.condition(stats, this.progressData);
-        
+
         if (result.achieved) {
           // Achievement unlocked!
           const achievement: Achievement = {
@@ -530,8 +551,14 @@ export class AchievementSystem {
       if (a.unlocked !== b.unlocked) {
         return a.unlocked ? -1 : 1;
       }
-      
-      const rarityOrder = { legendary: 0, epic: 1, rare: 2, uncommon: 3, common: 4 };
+
+      const rarityOrder = {
+        legendary: 0,
+        epic: 1,
+        rare: 2,
+        uncommon: 3,
+        common: 4,
+      };
       const rarityDiff = rarityOrder[a.rarity] - rarityOrder[b.rarity];
       if (rarityDiff !== 0) {
         return rarityDiff;
@@ -544,8 +571,12 @@ export class AchievementSystem {
   /**
    * Get achievements by category
    */
-  public getAchievementsByCategory(category: Achievement['category']): Achievement[] {
-    return this.getAllAchievements().filter(achievement => achievement.category === category);
+  public getAchievementsByCategory(
+    category: Achievement['category'],
+  ): Achievement[] {
+    return this.getAllAchievements().filter(
+      achievement => achievement.category === category,
+    );
   }
 
   /**
@@ -555,13 +586,22 @@ export class AchievementSystem {
     total: number;
     unlocked: number;
     percentage: number;
-    byRarity: Record<Achievement['rarity'], { total: number; unlocked: number }>;
-    byCategory: Record<Achievement['category'], { total: number; unlocked: number }>;
+    byRarity: Record<
+      Achievement['rarity'],
+      { total: number; unlocked: number }
+    >;
+    byCategory: Record<
+      Achievement['category'],
+      { total: number; unlocked: number }
+    >;
   } {
     const achievements = this.getAllAchievements();
     const unlocked = achievements.filter(a => a.unlocked);
 
-    const byRarity: Record<Achievement['rarity'], { total: number; unlocked: number }> = {
+    const byRarity: Record<
+      Achievement['rarity'],
+      { total: number; unlocked: number }
+    > = {
       common: { total: 0, unlocked: 0 },
       uncommon: { total: 0, unlocked: 0 },
       rare: { total: 0, unlocked: 0 },
@@ -569,7 +609,10 @@ export class AchievementSystem {
       legendary: { total: 0, unlocked: 0 },
     };
 
-    const byCategory: Record<Achievement['category'], { total: number; unlocked: number }> = {
+    const byCategory: Record<
+      Achievement['category'],
+      { total: number; unlocked: number }
+    > = {
       score: { total: 0, unlocked: 0 },
       accuracy: { total: 0, unlocked: 0 },
       speed: { total: 0, unlocked: 0 },
@@ -581,7 +624,7 @@ export class AchievementSystem {
     for (const achievement of achievements) {
       byRarity[achievement.rarity].total++;
       byCategory[achievement.category].total++;
-      
+
       if (achievement.unlocked) {
         byRarity[achievement.rarity].unlocked++;
         byCategory[achievement.category].unlocked++;
@@ -591,7 +634,10 @@ export class AchievementSystem {
     return {
       total: achievements.length,
       unlocked: unlocked.length,
-      percentage: achievements.length > 0 ? (unlocked.length / achievements.length) * 100 : 0,
+      percentage:
+        achievements.length > 0
+          ? (unlocked.length / achievements.length) * 100
+          : 0,
       byRarity,
       byCategory,
     };
@@ -616,7 +662,10 @@ export class AchievementSystem {
    */
   private saveProgress(): void {
     try {
-      localStorage.setItem('sprintsolve-achievement-progress', JSON.stringify(this.progressData));
+      localStorage.setItem(
+        'sprintsolve-achievement-progress',
+        JSON.stringify(this.progressData),
+      );
     } catch (error) {
       console.warn('Failed to save achievement progress:', error);
     }
@@ -627,27 +676,42 @@ export class AchievementSystem {
    */
   public static getRarityColor(rarity: Achievement['rarity']): string {
     switch (rarity) {
-      case 'common': return '#9CA3AF';
-      case 'uncommon': return '#10B981';
-      case 'rare': return '#3B82F6';
-      case 'epic': return '#8B5CF6';
-      case 'legendary': return '#F59E0B';
-      default: return '#6B7280';
+      case 'common':
+        return '#9CA3AF';
+      case 'uncommon':
+        return '#10B981';
+      case 'rare':
+        return '#3B82F6';
+      case 'epic':
+        return '#8B5CF6';
+      case 'legendary':
+        return '#F59E0B';
+      default:
+        return '#6B7280';
     }
   }
 
   /**
    * Get category display name
    */
-  public static getCategoryDisplayName(category: Achievement['category']): string {
+  public static getCategoryDisplayName(
+    category: Achievement['category'],
+  ): string {
     switch (category) {
-      case 'score': return 'Score';
-      case 'accuracy': return 'Accuracy';
-      case 'speed': return 'Speed';
-      case 'persistence': return 'Persistence';
-      case 'exploration': return 'Exploration';
-      case 'special': return 'Special';
-      default: return 'Unknown';
+      case 'score':
+        return 'Score';
+      case 'accuracy':
+        return 'Accuracy';
+      case 'speed':
+        return 'Speed';
+      case 'persistence':
+        return 'Persistence';
+      case 'exploration':
+        return 'Exploration';
+      case 'special':
+        return 'Special';
+      default:
+        return 'Unknown';
     }
   }
 }

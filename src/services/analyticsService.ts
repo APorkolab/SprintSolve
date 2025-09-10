@@ -11,7 +11,12 @@ export interface AnalyticsConfig {
 
 // User behavior tracking types
 export interface GameplayEvent {
-  event: 'game_start' | 'game_end' | 'question_answered' | 'level_completed' | 'achievement_unlocked';
+  event:
+    | 'game_start'
+    | 'game_end'
+    | 'question_answered'
+    | 'level_completed'
+    | 'achievement_unlocked';
   category?: string;
   difficulty?: string;
   score?: number;
@@ -63,7 +68,9 @@ class AnalyticsService {
   /**
    * Initialize analytics with Google Analytics 4
    */
-  public async initialize(config: Partial<AnalyticsConfig> = {}): Promise<void> {
+  public async initialize(
+    config: Partial<AnalyticsConfig> = {},
+  ): Promise<void> {
     this.config = { ...this.config, ...config };
 
     if (!this.config.userConsent) {
@@ -150,7 +157,10 @@ class AnalyticsService {
   /**
    * Track custom events
    */
-  public trackCustomEvent(eventName: string, properties: Record<string, any> = {}): void {
+  public trackCustomEvent(
+    eventName: string,
+    properties: Record<string, any> = {},
+  ): void {
     const eventData = {
       event: eventName,
       ...properties,
@@ -201,12 +211,18 @@ class AnalyticsService {
     bounceRate: number;
   } {
     const sessionDuration = Date.now() - this.sessionData.startTime;
-    const totalSessions = parseInt(localStorage.getItem('analytics_total_sessions') || '1');
-    const totalSessionTime = parseInt(localStorage.getItem('analytics_total_session_time') || '0') + sessionDuration;
+    const totalSessions = parseInt(
+      localStorage.getItem('analytics_total_sessions') || '1',
+    );
+    const totalSessionTime =
+      parseInt(localStorage.getItem('analytics_total_session_time') || '0') +
+      sessionDuration;
     const averageSessionDuration = totalSessionTime / totalSessions;
-    
+
     // Calculate bounce rate (sessions with < 30 seconds engagement)
-    const shortSessions = parseInt(localStorage.getItem('analytics_short_sessions') || '0');
+    const shortSessions = parseInt(
+      localStorage.getItem('analytics_short_sessions') || '0',
+    );
     const bounceRate = (shortSessions / totalSessions) * 100;
 
     return {
@@ -236,7 +252,9 @@ class AnalyticsService {
    */
   public clearAnalyticsData(): void {
     // Clear localStorage
-    const analyticsKeys = Object.keys(localStorage).filter(key => key.startsWith('analytics_'));
+    const analyticsKeys = Object.keys(localStorage).filter(key =>
+      key.startsWith('analytics_'),
+    );
     analyticsKeys.forEach(key => localStorage.removeItem(key));
 
     // Reset session
@@ -275,11 +293,14 @@ class AnalyticsService {
 
   private initializeSession(): UserSessionData {
     const existingSession = localStorage.getItem('analytics_session');
-    
+
     if (existingSession) {
       const session = JSON.parse(existingSession);
       // Check if session is still valid
-      if (Date.now() - session.lastActivity < (this.config.sessionTimeout || 30 * 60 * 1000)) {
+      if (
+        Date.now() - session.lastActivity <
+        (this.config.sessionTimeout || 30 * 60 * 1000)
+      ) {
         session.lastActivity = Date.now();
         return session;
       }
@@ -302,7 +323,7 @@ class AnalyticsService {
 
     // Store user ID permanently
     localStorage.setItem('analytics_user_id', newSession.userId);
-    
+
     return newSession;
   }
 
@@ -331,18 +352,28 @@ class AnalyticsService {
 
   private endSession(): void {
     const sessionDuration = Date.now() - this.sessionData.startTime;
-    
+
     // Update total statistics
-    const totalSessions = parseInt(localStorage.getItem('analytics_total_sessions') || '0') + 1;
-    const totalSessionTime = parseInt(localStorage.getItem('analytics_total_session_time') || '0') + sessionDuration;
-    
+    const totalSessions =
+      parseInt(localStorage.getItem('analytics_total_sessions') || '0') + 1;
+    const totalSessionTime =
+      parseInt(localStorage.getItem('analytics_total_session_time') || '0') +
+      sessionDuration;
+
     localStorage.setItem('analytics_total_sessions', totalSessions.toString());
-    localStorage.setItem('analytics_total_session_time', totalSessionTime.toString());
+    localStorage.setItem(
+      'analytics_total_session_time',
+      totalSessionTime.toString(),
+    );
 
     // Check if it was a short session (bounce)
     if (sessionDuration < 30000) {
-      const shortSessions = parseInt(localStorage.getItem('analytics_short_sessions') || '0') + 1;
-      localStorage.setItem('analytics_short_sessions', shortSessions.toString());
+      const shortSessions =
+        parseInt(localStorage.getItem('analytics_short_sessions') || '0') + 1;
+      localStorage.setItem(
+        'analytics_short_sessions',
+        shortSessions.toString(),
+      );
     }
 
     // Track session end
@@ -361,10 +392,16 @@ class AnalyticsService {
     switch (event.event) {
       case 'game_start':
         this.sessionData.gamesPlayed++;
-        if (event.category && !this.sessionData.categoriesPlayed.includes(event.category)) {
+        if (
+          event.category &&
+          !this.sessionData.categoriesPlayed.includes(event.category)
+        ) {
           this.sessionData.categoriesPlayed.push(event.category);
         }
-        if (event.difficulty && !this.sessionData.difficultiesPlayed.includes(event.difficulty)) {
+        if (
+          event.difficulty &&
+          !this.sessionData.difficultiesPlayed.includes(event.difficulty)
+        ) {
           this.sessionData.difficultiesPlayed.push(event.difficulty);
         }
         break;
@@ -372,7 +409,8 @@ class AnalyticsService {
       case 'game_end':
         if (event.score) {
           this.sessionData.totalScore += event.score;
-          this.sessionData.averageScore = this.sessionData.totalScore / this.sessionData.gamesPlayed;
+          this.sessionData.averageScore =
+            this.sessionData.totalScore / this.sessionData.gamesPlayed;
         }
         if (event.duration) {
           this.sessionData.totalPlayTime += event.duration;
@@ -380,7 +418,10 @@ class AnalyticsService {
         break;
 
       case 'achievement_unlocked':
-        if (event.category && !this.sessionData.achievementsUnlocked.includes(event.category)) {
+        if (
+          event.category &&
+          !this.sessionData.achievementsUnlocked.includes(event.category)
+        ) {
           this.sessionData.achievementsUnlocked.push(event.category);
         }
         break;
@@ -406,10 +447,10 @@ class AnalyticsService {
         // Initialize gtag
         script.onload = () => {
           (window as any).dataLayer = (window as any).dataLayer || [];
-          (window as any).gtag = function() {
+          (window as any).gtag = function () {
             (window as any).dataLayer.push(arguments);
           };
-          
+
           gtag('js', new Date());
           gtag('config', this.config.gtag!, {
             cookie_flags: 'SameSite=None;Secure',
@@ -451,21 +492,21 @@ class AnalyticsService {
   private storeEventLocally(eventType: string, eventData: any): void {
     const events = JSON.parse(localStorage.getItem('analytics_events') || '[]');
     events.push({ eventType, eventData, timestamp: Date.now() });
-    
+
     // Keep only last 1000 events to prevent storage bloat
     if (events.length > 1000) {
       events.splice(0, events.length - 1000);
     }
-    
+
     localStorage.setItem('analytics_events', JSON.stringify(events));
   }
 
   private setupPerformanceMonitoring(): void {
     if ('PerformanceObserver' in window) {
       // Monitor navigation timing
-      this.performanceObserver = new PerformanceObserver((list) => {
+      this.performanceObserver = new PerformanceObserver(list => {
         const entries = list.getEntries();
-        entries.forEach((entry) => {
+        entries.forEach(entry => {
           if (entry.entryType === 'navigation') {
             const navEntry = entry as PerformanceNavigationTiming;
             this.trackPerformance({
@@ -478,17 +519,19 @@ class AnalyticsService {
         });
       });
 
-      this.performanceObserver.observe({ entryTypes: ['navigation', 'resource'] });
+      this.performanceObserver.observe({
+        entryTypes: ['navigation', 'resource'],
+      });
     }
 
     // Monitor FPS
     let lastTime = performance.now();
     let frames = 0;
-    
+
     const measureFPS = () => {
       frames++;
       const currentTime = performance.now();
-      
+
       if (currentTime >= lastTime + 1000) {
         const fps = Math.round((frames * 1000) / (currentTime - lastTime));
         this.trackPerformance({
@@ -497,14 +540,14 @@ class AnalyticsService {
           value: fps,
           context: 'gameplay',
         });
-        
+
         frames = 0;
         lastTime = currentTime;
       }
-      
+
       requestAnimationFrame(measureFPS);
     };
-    
+
     requestAnimationFrame(measureFPS);
   }
 }

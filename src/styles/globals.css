@@ -9,27 +9,27 @@
 /* Base styles */
 @layer base {
   :root {
-    --color-primary: #FF6A00;
-    --color-secondary: #FFE600;
-    --color-background: #FFE600;
-    --color-border: #FF0000;
-    --color-text: #1F2937;
-    --color-success: #10B981;
-    --color-error: #EF4444;
-    --color-warning: #F59E0B;
-    --color-info: #3B82F6;
+    --color-primary: #ff6a00;
+    --color-secondary: #ffe600;
+    --color-background: #ffe600;
+    --color-border: #ff0000;
+    --color-text: #1f2937;
+    --color-success: #10b981;
+    --color-error: #ef4444;
+    --color-warning: #f59e0b;
+    --color-info: #3b82f6;
   }
 
   .dark {
-    --color-primary: #FF6A00;
-    --color-secondary: #FFE600;
-    --color-background: #0F1419;
-    --color-border: #FF0000;
-    --color-text: #F9FAFB;
-    --color-success: #10B981;
-    --color-error: #EF4444;
-    --color-warning: #F59E0B;
-    --color-info: #3B82F6;
+    --color-primary: #ff6a00;
+    --color-secondary: #ffe600;
+    --color-background: #0f1419;
+    --color-border: #ff0000;
+    --color-text: #f9fafb;
+    --color-success: #10b981;
+    --color-error: #ef4444;
+    --color-warning: #f59e0b;
+    --color-info: #3b82f6;
   }
 
   html {
@@ -233,7 +233,7 @@
     .btn-primary {
       @apply border-2 border-black;
     }
-    
+
     .card {
       @apply border-2 border-gray-800;
     }
@@ -279,19 +279,19 @@
   }
 
   .text-outline {
-    text-shadow: 
+    text-shadow:
       -1px -1px 0 #000,
-       1px -1px 0 #000,
-      -1px  1px 0 #000,
-       1px  1px 0 #000;
+      1px -1px 0 #000,
+      -1px 1px 0 #000,
+      1px 1px 0 #000;
   }
 
   .text-outline-white {
-    text-shadow: 
+    text-shadow:
       -1px -1px 0 #fff,
-       1px -1px 0 #fff,
-      -1px  1px 0 #fff,
-       1px  1px 0 #fff;
+      1px -1px 0 #fff,
+      -1px 1px 0 #fff,
+      1px 1px 0 #fff;
   }
 
   /* Performance utilities */

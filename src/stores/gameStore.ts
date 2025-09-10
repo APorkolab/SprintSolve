@@ -87,7 +87,7 @@ export const useGameStore = create<GameStoreState>()(
         // Core actions
         setGameState: (state: GameState) => {
           set({ gameState: state });
-          
+
           // Track game state changes
           if (state === 'playing') {
             const stats = get().statistics;
@@ -104,8 +104,8 @@ export const useGameStore = create<GameStoreState>()(
         incrementScore: () => {
           const currentScore = get().score.value;
           const newScore = currentScore + 1;
-          
-          set({ 
+
+          set({
             score: { value: newScore },
             experience: get().experience + 10,
           });
@@ -118,7 +118,9 @@ export const useGameStore = create<GameStoreState>()(
               totalScore: stats.totalScore + 1,
               bestScore: Math.max(stats.bestScore, newScore),
               correctAnswers: stats.correctAnswers + 1,
-              averageScore: (stats.totalScore + 1) / Math.max(stats.totalQuestionsAnswered, 1),
+              averageScore:
+                (stats.totalScore + 1) /
+                Math.max(stats.totalQuestionsAnswered, 1),
             },
           });
 
@@ -145,13 +147,13 @@ export const useGameStore = create<GameStoreState>()(
 
         setSelectedCategory: (categoryId: number) => {
           set({ selectedCategoryId: categoryId });
-          
+
           // Track category usage
           const stats = get().statistics;
           const categoriesPlayed = stats.categoriesPlayed.includes(categoryId)
             ? stats.categoriesPlayed
             : [...stats.categoriesPlayed, categoryId];
-            
+
           set({
             statistics: {
               ...stats,
@@ -178,7 +180,7 @@ export const useGameStore = create<GameStoreState>()(
         decrementLives: () => {
           const newLives = Math.max(0, get().lives - 1);
           set({ lives: newLives });
-          
+
           if (newLives === 0) {
             get().setGameState('gameOver');
           }
@@ -197,7 +199,7 @@ export const useGameStore = create<GameStoreState>()(
         addExperience: (xp: number) => {
           const newXP = get().experience + xp;
           set({ experience: newXP });
-          
+
           // Check for level up
           const newLevel = Math.floor(newXP / 100) + 1;
           if (newLevel > get().level) {
@@ -237,7 +239,7 @@ export const useGameStore = create<GameStoreState>()(
       {
         name: 'sprintsolve-game-storage',
         storage: createJSONStorage(() => localStorage),
-        partialize: (state) => ({
+        partialize: state => ({
           // Only persist these properties
           settings: state.settings,
           statistics: state.statistics,
@@ -245,27 +247,28 @@ export const useGameStore = create<GameStoreState>()(
           level: state.level,
           experience: state.experience,
         }),
-      }
-    )
-  )
+      },
+    ),
+  ),
 );
 
 // Selectors for better performance
-export const useGameState = () => useGameStore((state) => state.gameState);
-export const useScore = () => useGameStore((state) => state.score);
-export const useShield = () => useGameStore((state) => state.hasShield);
-export const useGameSpeed = () => useGameStore((state) => state.gameSpeed);
-export const useSelectedCategory = () => useGameStore((state) => state.selectedCategoryId);
-export const useLives = () => useGameStore((state) => state.lives);
-export const useLevel = () => useGameStore((state) => state.level);
-export const useExperience = () => useGameStore((state) => state.experience);
-export const useAchievements = () => useGameStore((state) => state.achievements);
-export const useSettings = () => useGameStore((state) => state.settings);
-export const useStatistics = () => useGameStore((state) => state.statistics);
+export const useGameState = () => useGameStore(state => state.gameState);
+export const useScore = () => useGameStore(state => state.score);
+export const useShield = () => useGameStore(state => state.hasShield);
+export const useGameSpeed = () => useGameStore(state => state.gameSpeed);
+export const useSelectedCategory = () =>
+  useGameStore(state => state.selectedCategoryId);
+export const useLives = () => useGameStore(state => state.lives);
+export const useLevel = () => useGameStore(state => state.level);
+export const useExperience = () => useGameStore(state => state.experience);
+export const useAchievements = () => useGameStore(state => state.achievements);
+export const useSettings = () => useGameStore(state => state.settings);
+export const useStatistics = () => useGameStore(state => state.statistics);
 
 // Action selectors
 export const useGameActions = () =>
-  useGameStore((state) => ({
+  useGameStore(state => ({
     setGameState: state.setGameState,
     incrementScore: state.incrementScore,
     resetScore: state.resetScore,
@@ -283,32 +286,32 @@ export const useGameActions = () =>
 
 // Subscribe to store changes for analytics
 useGameStore.subscribe(
-  (state) => state.statistics,
+  state => state.statistics,
   (statistics, previousStatistics) => {
     // Analytics tracking
     if (statistics.totalGamesPlayed > previousStatistics.totalGamesPlayed) {
       // Track game started
       console.debug('Game started:', statistics.totalGamesPlayed);
     }
-    
+
     if (statistics.bestScore > previousStatistics.bestScore) {
       // Track new high score
       console.debug('New high score:', statistics.bestScore);
     }
-  }
+  },
 );
 
 // Subscribe to achievements for notifications
 useGameStore.subscribe(
-  (state) => state.achievements,
+  state => state.achievements,
   (achievements, previousAchievements) => {
     const newAchievements = achievements.filter(
-      (achievement) => !previousAchievements.includes(achievement)
+      achievement => !previousAchievements.includes(achievement),
     );
-    
+
     for (const achievement of newAchievements) {
       // Show achievement notification
       console.debug('Achievement unlocked:', achievement);
     }
-  }
+  },
 );

@@ -189,8 +189,8 @@
   direction: rtl;
 }
 
-.rtl input[type="checkbox"],
-.rtl input[type="radio"] {
+.rtl input[type='checkbox'],
+.rtl input[type='radio'] {
   margin-left: 0.5rem;
   margin-right: 0;
 }

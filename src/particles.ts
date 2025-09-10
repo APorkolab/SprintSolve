@@ -29,7 +29,7 @@ class ParticleImpl implements IParticle {
   public draw(ctx: CanvasRenderingContext2D): void {
     // Fade out effect based on remaining ttl
     const alpha = Math.max(0, this.ttl / 150);
-    
+
     ctx.save();
     ctx.globalAlpha = alpha;
     ctx.fillStyle = this.color;
@@ -80,7 +80,7 @@ class ParticlePool {
       if (!particle.isAlive) {
         // Return particle to pool
         this.activeParticles.splice(i, 1);
-        
+
         if (this.pool.length < this.maxPoolSize) {
           this.pool.push(particle);
         }
@@ -122,7 +122,11 @@ const particlePool = new ParticlePool();
 /**
  * Creates an explosion effect at the specified location
  */
-export function createExplosion(x: number, y: number, particleCount: number = 50): void {
+export function createExplosion(
+  x: number,
+  y: number,
+  particleCount: number = 50,
+): void {
   for (let i = 0; i < particleCount; i++) {
     // Add some randomness to the position for better visual effect
     const offsetX = randomBetween(-10, 10);
@@ -134,14 +138,22 @@ export function createExplosion(x: number, y: number, particleCount: number = 50
 /**
  * Creates a burst effect (smaller explosion)
  */
-export function createBurst(x: number, y: number, particleCount: number = 15): void {
+export function createBurst(
+  x: number,
+  y: number,
+  particleCount: number = 15,
+): void {
   createExplosion(x, y, particleCount);
 }
 
 /**
  * Creates a trail effect
  */
-export function createTrail(x: number, y: number, particleCount: number = 3): void {
+export function createTrail(
+  x: number,
+  y: number,
+  particleCount: number = 3,
+): void {
   createExplosion(x, y, particleCount);
 }
 
@@ -183,12 +195,7 @@ export class ParticleSystem {
     this.pools.set(name, new ParticlePool());
   }
 
-  public emit(
-    poolName: string,
-    x: number,
-    y: number,
-    count: number = 1,
-  ): void {
+  public emit(poolName: string, x: number, y: number, count: number = 1): void {
     const pool = this.pools.get(poolName);
     if (!pool) {
       // eslint-disable-next-line no-console
@@ -228,11 +235,11 @@ export class ParticleSystem {
 
   public getStats(): Record<string, { active: number; pooled: number }> {
     const stats: Record<string, { active: number; pooled: number }> = {};
-    
+
     for (const [name, pool] of this.pools.entries()) {
       stats[name] = pool.getStats();
     }
-    
+
     return stats;
   }
 }

@@ -4,18 +4,90 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 
 // Supported languages configuration
 export const SUPPORTED_LANGUAGES = {
-  en: { code: 'en', name: 'English', nativeName: 'English', flag: '🇺🇸', rtl: false },
-  es: { code: 'es', name: 'Spanish', nativeName: 'Español', flag: '🇪🇸', rtl: false },
-  fr: { code: 'fr', name: 'French', nativeName: 'Français', flag: '🇫🇷', rtl: false },
-  de: { code: 'de', name: 'German', nativeName: 'Deutsch', flag: '🇩🇪', rtl: false },
-  it: { code: 'it', name: 'Italian', nativeName: 'Italiano', flag: '🇮🇹', rtl: false },
-  pt: { code: 'pt', name: 'Portuguese', nativeName: 'Português', flag: '🇵🇹', rtl: false },
-  ru: { code: 'ru', name: 'Russian', nativeName: 'Русский', flag: '🇷🇺', rtl: false },
-  ja: { code: 'ja', name: 'Japanese', nativeName: '日本語', flag: '🇯🇵', rtl: false },
-  ko: { code: 'ko', name: 'Korean', nativeName: '한국어', flag: '🇰🇷', rtl: false },
-  zh: { code: 'zh', name: 'Chinese', nativeName: '中文', flag: '🇨🇳', rtl: false },
-  ar: { code: 'ar', name: 'Arabic', nativeName: 'العربية', flag: '🇸🇦', rtl: true },
-  he: { code: 'he', name: 'Hebrew', nativeName: 'עברית', flag: '🇮🇱', rtl: true },
+  en: {
+    code: 'en',
+    name: 'English',
+    nativeName: 'English',
+    flag: '🇺🇸',
+    rtl: false,
+  },
+  es: {
+    code: 'es',
+    name: 'Spanish',
+    nativeName: 'Español',
+    flag: '🇪🇸',
+    rtl: false,
+  },
+  fr: {
+    code: 'fr',
+    name: 'French',
+    nativeName: 'Français',
+    flag: '🇫🇷',
+    rtl: false,
+  },
+  de: {
+    code: 'de',
+    name: 'German',
+    nativeName: 'Deutsch',
+    flag: '🇩🇪',
+    rtl: false,
+  },
+  it: {
+    code: 'it',
+    name: 'Italian',
+    nativeName: 'Italiano',
+    flag: '🇮🇹',
+    rtl: false,
+  },
+  pt: {
+    code: 'pt',
+    name: 'Portuguese',
+    nativeName: 'Português',
+    flag: '🇵🇹',
+    rtl: false,
+  },
+  ru: {
+    code: 'ru',
+    name: 'Russian',
+    nativeName: 'Русский',
+    flag: '🇷🇺',
+    rtl: false,
+  },
+  ja: {
+    code: 'ja',
+    name: 'Japanese',
+    nativeName: '日本語',
+    flag: '🇯🇵',
+    rtl: false,
+  },
+  ko: {
+    code: 'ko',
+    name: 'Korean',
+    nativeName: '한국어',
+    flag: '🇰🇷',
+    rtl: false,
+  },
+  zh: {
+    code: 'zh',
+    name: 'Chinese',
+    nativeName: '中文',
+    flag: '🇨🇳',
+    rtl: false,
+  },
+  ar: {
+    code: 'ar',
+    name: 'Arabic',
+    nativeName: 'العربية',
+    flag: '🇸🇦',
+    rtl: true,
+  },
+  he: {
+    code: 'he',
+    name: 'Hebrew',
+    nativeName: 'עברית',
+    flag: '🇮🇱',
+    rtl: true,
+  },
 } as const;
 
 export type SupportedLanguage = keyof typeof SUPPORTED_LANGUAGES;
@@ -94,7 +166,8 @@ export const DEFAULT_TRANSLATIONS = {
     },
     privacy: {
       cookieConsent: 'We value your privacy',
-      cookieDescription: 'We use cookies and similar technologies to enhance your gaming experience.',
+      cookieDescription:
+        'We use cookies and similar technologies to enhance your gaming experience.',
       necessary: 'Necessary',
       analytics: 'Analytics',
       marketing: 'Marketing',
@@ -116,7 +189,8 @@ export interface I18nConfig {
 class I18nService {
   private currentLanguage: SupportedLanguage = 'en';
   private isInitialized = false;
-  private changeListeners: Set<(_language: SupportedLanguage) => void> = new Set();
+  private changeListeners: Set<(_language: SupportedLanguage) => void> =
+    new Set();
 
   constructor() {
     this.currentLanguage = this.detectLanguage();
@@ -164,7 +238,7 @@ class I18nService {
     if (!this.isInitialized) {
       await this.initialize();
     }
-    
+
     try {
       await i18n.changeLanguage(language);
       this.currentLanguage = language;
@@ -183,15 +257,15 @@ class I18nService {
     if (!this.isInitialized) {
       const keys = key.split('.');
       let value: any = DEFAULT_TRANSLATIONS.en;
-      
+
       for (const k of keys) {
         value = value?.[k];
         if (!value) break;
       }
-      
+
       return value || key;
     }
-    
+
     return i18n.t(key, options) as string;
   }
 
@@ -211,9 +285,14 @@ class I18nService {
     return SUPPORTED_LANGUAGES[this.currentLanguage]?.rtl || false;
   }
 
-  public formatNumber(number: number, options?: Intl.NumberFormatOptions): string {
+  public formatNumber(
+    number: number,
+    options?: Intl.NumberFormatOptions,
+  ): string {
     try {
-      return new Intl.NumberFormat(this.currentLanguage, options).format(number);
+      return new Intl.NumberFormat(this.currentLanguage, options).format(
+        number,
+      );
     } catch {
       return number.toString();
     }
@@ -221,13 +300,17 @@ class I18nService {
 
   public formatDate(date: Date, options?: Intl.DateTimeFormatOptions): string {
     try {
-      return new Intl.DateTimeFormat(this.currentLanguage, options).format(date);
+      return new Intl.DateTimeFormat(this.currentLanguage, options).format(
+        date,
+      );
     } catch {
       return date.toLocaleDateString();
     }
   }
 
-  public onLanguageChange(callback: (_language: SupportedLanguage) => void): () => void {
+  public onLanguageChange(
+    callback: (_language: SupportedLanguage) => void,
+  ): () => void {
     this.changeListeners.add(callback);
     return () => this.changeListeners.delete(callback);
   }
@@ -237,26 +320,26 @@ class I18nService {
     if (saved && saved in SUPPORTED_LANGUAGES) {
       return saved;
     }
-    
+
     const browserLang = navigator.language.split('-')[0] as SupportedLanguage;
     if (browserLang in SUPPORTED_LANGUAGES) {
       return browserLang;
     }
-    
+
     for (const lang of navigator.languages) {
       const langCode = lang.split('-')[0] as SupportedLanguage;
       if (langCode in SUPPORTED_LANGUAGES) {
         return langCode;
       }
     }
-    
+
     return 'en';
   }
 
   private applyTextDirection(): void {
     const isRTL = this.isRTL();
     const htmlElement = document.documentElement;
-    
+
     if (isRTL) {
       htmlElement.setAttribute('dir', 'rtl');
       htmlElement.setAttribute('lang', this.currentLanguage);

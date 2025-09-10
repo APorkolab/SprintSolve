@@ -1,5 +1,11 @@
 /* eslint-disable no-console */
-import type { Obstacle, Tunnel, Character, CollisionResult, Question } from '@/types';
+import type {
+  Obstacle,
+  Tunnel,
+  Character,
+  CollisionResult,
+  Question,
+} from '@/types';
 import { wrapText } from '@/utils';
 
 /**
@@ -21,15 +27,15 @@ class ObstacleImpl implements Obstacle {
 
   public draw(ctx: CanvasRenderingContext2D, image?: HTMLImageElement): void {
     const wallColor = '#FF4500';
-    
+
     ctx.fillStyle = wallColor;
     ctx.fillRect(this.x, this.y, this.width, this.height);
-    
+
     // Add texture/border effect
     ctx.strokeStyle = '#CC3300';
     ctx.lineWidth = 2;
     ctx.strokeRect(this.x, this.y, this.width, this.height);
-    
+
     // Optional: use image if provided
     if (image) {
       ctx.drawImage(image, this.x, this.y, this.width, this.height);
@@ -74,7 +80,7 @@ class TunnelImpl implements Tunnel {
     width: number,
     height: number,
     isCorrect: boolean,
-    answerText: string
+    answerText: string,
   ) {
     this.x = x;
     this.y = y;
@@ -87,7 +93,7 @@ class TunnelImpl implements Tunnel {
   public draw(ctx: CanvasRenderingContext2D): void {
     // Tunnels are empty space, but we draw the answer text in them
     const textColor = this.isCorrect ? '#00FF00' : '#FFFFFF';
-    
+
     ctx.fillStyle = textColor;
     ctx.font = '14px "Press Start 2P"';
     ctx.textAlign = 'center';
@@ -120,7 +126,7 @@ class TunnelImpl implements Tunnel {
     width: number,
     height: number,
     isCorrect: boolean,
-    answerText: string
+    answerText: string,
   ): void {
     this.x = x;
     this.y = y;
@@ -142,7 +148,7 @@ class ObstaclePool {
     x: number,
     y: number,
     width: number,
-    height: number
+    height: number,
   ): ObstacleImpl {
     let obstacle: ObstacleImpl;
 
@@ -163,7 +169,7 @@ class ObstaclePool {
     width: number,
     height: number,
     isCorrect: boolean,
-    answerText: string
+    answerText: string,
   ): TunnelImpl {
     let tunnel: TunnelImpl;
 
@@ -208,7 +214,10 @@ class ObstaclePool {
     }
   }
 
-  public draw(ctx: CanvasRenderingContext2D, wallImage?: HTMLImageElement): void {
+  public draw(
+    ctx: CanvasRenderingContext2D,
+    wallImage?: HTMLImageElement,
+  ): void {
     // Draw obstacles
     for (const obstacle of this.activeObstacles) {
       obstacle.draw(ctx, wallImage);
@@ -227,7 +236,7 @@ class ObstaclePool {
         this.obstaclePool.push(obstacle);
       }
     }
-    
+
     for (const tunnel of this.activeTunnels) {
       if (this.tunnelPool.length < this.maxPoolSize) {
         this.tunnelPool.push(tunnel);
@@ -275,18 +284,23 @@ export class WallGenerator {
   public generateWallWithTunnels(
     canvas: HTMLCanvasElement,
     question: Question,
-    characterSize: number = 60
+    characterSize: number = 60,
   ): void {
     const wallWidth = this.defaultWallWidth;
-    const numberOfTunnels = Math.min(this.defaultTunnelCount, question.answers.length);
+    const numberOfTunnels = Math.min(
+      this.defaultTunnelCount,
+      question.answers.length,
+    );
     const tunnelHeight = Math.max(this.minTunnelHeight, characterSize * 2);
-    
+
     // Calculate layout
     const totalTunnelHeight = numberOfTunnels * tunnelHeight;
     const totalWallHeight = canvas.height - totalTunnelHeight;
 
     if (totalWallHeight < 0) {
-      console.error('Not enough space for tunnels. Reduce tunnel height or number of tunnels.');
+      console.error(
+        'Not enough space for tunnels. Reduce tunnel height or number of tunnels.',
+      );
       return;
     }
 
@@ -301,7 +315,7 @@ export class WallGenerator {
         canvas.width,
         currentY,
         wallWidth,
-        wallSegmentHeight
+        wallSegmentHeight,
       );
 
       // Add tunnel after the segment (except for the last one)
@@ -316,7 +330,7 @@ export class WallGenerator {
           wallWidth,
           tunnelHeight,
           isCorrect,
-          answerText
+          answerText,
         );
 
         currentY += wallSegmentHeight + tunnelHeight;
@@ -327,16 +341,16 @@ export class WallGenerator {
   public generateMovingWall(
     canvas: HTMLCanvasElement,
     question: Question,
-    characterSize: number = 60
+    characterSize: number = 60,
   ): void {
     // Implementation for moving/animated walls
     this.generateWallWithTunnels(canvas, question, characterSize);
-    
+
     // Add vertical movement to tunnels
     const tunnels = obstaclePool.getActiveTunnels();
     const amplitude = 30;
     const frequency = 0.02;
-    
+
     tunnels.forEach((tunnel, index) => {
       const offset = Math.sin(Date.now() * frequency + index) * amplitude;
       tunnel.y += offset;
@@ -348,10 +362,13 @@ export class WallGenerator {
  * Collision detection system
  */
 export class CollisionDetector {
-  public checkCollisions(character: Character, canvas: HTMLCanvasElement): CollisionResult {
+  public checkCollisions(
+    character: Character,
+    canvas: HTMLCanvasElement,
+  ): CollisionResult {
     // Check floor and ceiling collisions
     const characterHalfSize = character.size / 2;
-    
+
     if (character.y - characterHalfSize <= 0) {
       return 'ceiling';
     }
@@ -398,7 +415,7 @@ export class CollisionDetector {
 
   private isRectColliding(character: Character, obstacle: Obstacle): boolean {
     const charHalfSize = character.size / 2;
-    
+
     return (
       character.x + charHalfSize > obstacle.x &&
       character.x - charHalfSize < obstacle.x + obstacle.width &&
@@ -408,10 +425,7 @@ export class CollisionDetector {
   }
 
   private isCharacterInTunnel(character: Character, tunnel: Tunnel): boolean {
-    return (
-      character.y >= tunnel.y &&
-      character.y <= tunnel.y + tunnel.height
-    );
+    return character.y >= tunnel.y && character.y <= tunnel.y + tunnel.height;
   }
 }
 
@@ -425,7 +439,7 @@ export const tunnels: TunnelImpl[] = [];
 
 export function generateWallWithTunnels(
   canvas: HTMLCanvasElement,
-  questionState: Question
+  questionState: Question,
 ): void {
   obstaclePool.clear();
   wallGenerator.generateWallWithTunnels(canvas, questionState);
@@ -433,7 +447,7 @@ export function generateWallWithTunnels(
 
 export function checkCollisions(
   character: Character,
-  canvas: HTMLCanvasElement
+  canvas: HTMLCanvasElement,
 ): CollisionResult {
   return collisionDetector.checkCollisions(character, canvas);
 }
@@ -443,11 +457,11 @@ export function checkCollisions(
  */
 export function updateObstacles(gameSpeed: number): void {
   obstaclePool.update(gameSpeed);
-  
+
   // Update legacy arrays for backward compatibility
   obstacles.length = 0;
   tunnels.length = 0;
-  
+
   obstacles.push(...obstaclePool.getActiveObstacles());
   tunnels.push(...obstaclePool.getActiveTunnels());
 }
@@ -457,7 +471,7 @@ export function updateObstacles(gameSpeed: number): void {
  */
 export function drawObstacles(
   ctx: CanvasRenderingContext2D,
-  wallImage?: HTMLImageElement
+  wallImage?: HTMLImageElement,
 ): void {
   obstaclePool.draw(ctx, wallImage);
 }

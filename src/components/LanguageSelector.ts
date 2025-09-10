@@ -1,9 +1,19 @@
 /* eslint-disable no-console */
-import { i18nService, SUPPORTED_LANGUAGES, SupportedLanguage, t } from '../services/i18nService';
+import {
+  i18nService,
+  SUPPORTED_LANGUAGES,
+  SupportedLanguage,
+  t,
+} from '../services/i18nService';
 import { analyticsService } from '../services/analyticsService';
 
 export interface LanguageSelectorConfig {
-  position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'center';
+  position?:
+    | 'top-left'
+    | 'top-right'
+    | 'bottom-left'
+    | 'bottom-right'
+    | 'center';
   showFlags?: boolean;
   showNames?: boolean;
   compact?: boolean;
@@ -25,7 +35,7 @@ export class LanguageSelector {
       compact: false,
       ...config,
     };
-    
+
     this.currentLanguage = i18nService.getCurrentLanguage();
     this.create();
     this.setupEventListeners();
@@ -38,31 +48,34 @@ export class LanguageSelector {
     // Create container
     this.container = document.createElement('div');
     this.container.className = `language-selector ${this.config.position} ${this.config.compact ? 'compact' : ''}`;
-    
+
     // Create current language button
     const currentButton = document.createElement('button');
     currentButton.className = 'current-language-btn';
     currentButton.setAttribute('aria-haspopup', 'true');
     currentButton.setAttribute('aria-expanded', 'false');
-    currentButton.setAttribute('aria-label', t('accessibility.languageSelector'));
-    
+    currentButton.setAttribute(
+      'aria-label',
+      t('accessibility.languageSelector'),
+    );
+
     this.updateCurrentLanguageButton(currentButton);
-    
+
     // Create dropdown
     this.dropdown = document.createElement('div');
     this.dropdown.className = 'language-dropdown';
     this.dropdown.setAttribute('role', 'menu');
     this.dropdown.setAttribute('aria-label', t('settings.language'));
-    
+
     this.createDropdownItems();
-    
+
     // Assemble
     this.container.appendChild(currentButton);
     this.container.appendChild(this.dropdown);
-    
+
     // Add styles
     this.addStyles();
-    
+
     // Add to DOM
     document.body.appendChild(this.container);
   }
@@ -72,13 +85,20 @@ export class LanguageSelector {
    */
   private updateCurrentLanguageButton(button: HTMLElement): void {
     const langConfig = SUPPORTED_LANGUAGES[this.currentLanguage];
-    const flagSpan = this.config.showFlags ? `<span class="flag">${langConfig.flag}</span>` : '';
-    const nameSpan = this.config.showNames && !this.config.compact ? 
-      `<span class="name">${langConfig.nativeName}</span>` : '';
+    const flagSpan = this.config.showFlags
+      ? `<span class="flag">${langConfig.flag}</span>`
+      : '';
+    const nameSpan =
+      this.config.showNames && !this.config.compact
+        ? `<span class="name">${langConfig.nativeName}</span>`
+        : '';
     const chevron = '<span class="chevron">▼</span>';
-    
+
     button.innerHTML = `${flagSpan}${nameSpan}${chevron}`;
-    button.setAttribute('title', `${t('settings.language')}: ${langConfig.nativeName}`);
+    button.setAttribute(
+      'title',
+      `${t('settings.language')}: ${langConfig.nativeName}`,
+    );
   }
 
   /**
@@ -86,29 +106,39 @@ export class LanguageSelector {
    */
   private createDropdownItems(): void {
     if (!this.dropdown) return;
-    
+
     this.dropdown.innerHTML = '';
-    
-    Object.values(SUPPORTED_LANGUAGES).forEach((langConfig) => {
+
+    Object.values(SUPPORTED_LANGUAGES).forEach(langConfig => {
       const item = document.createElement('button');
       item.className = `language-item ${langConfig.code === this.currentLanguage ? 'active' : ''}`;
       item.setAttribute('role', 'menuitem');
       item.setAttribute('data-language', langConfig.code);
-      item.setAttribute('aria-label', `${t('settings.language')}: ${langConfig.nativeName}`);
-      
-      const flagSpan = this.config.showFlags ? `<span class="flag">${langConfig.flag}</span>` : '';
-      const nameSpan = this.config.showNames ? `<span class="name">${langConfig.nativeName}</span>` : '';
-      const checkmark = langConfig.code === this.currentLanguage ? '<span class="checkmark">✓</span>' : '';
-      
+      item.setAttribute(
+        'aria-label',
+        `${t('settings.language')}: ${langConfig.nativeName}`,
+      );
+
+      const flagSpan = this.config.showFlags
+        ? `<span class="flag">${langConfig.flag}</span>`
+        : '';
+      const nameSpan = this.config.showNames
+        ? `<span class="name">${langConfig.nativeName}</span>`
+        : '';
+      const checkmark =
+        langConfig.code === this.currentLanguage
+          ? '<span class="checkmark">✓</span>'
+          : '';
+
       item.innerHTML = `${flagSpan}${nameSpan}${checkmark}`;
-      
+
       // Add click handler
-      item.addEventListener('click', async (e) => {
+      item.addEventListener('click', async e => {
         e.preventDefault();
         e.stopPropagation();
         await this.selectLanguage(langConfig.code);
       });
-      
+
       this.dropdown?.appendChild(item);
     });
   }
@@ -118,25 +148,27 @@ export class LanguageSelector {
    */
   private setupEventListeners(): void {
     if (!this.container) return;
-    
-    const currentButton = this.container.querySelector('.current-language-btn') as HTMLElement;
-    
+
+    const currentButton = this.container.querySelector(
+      '.current-language-btn',
+    ) as HTMLElement;
+
     // Toggle dropdown on button click
-    currentButton?.addEventListener('click', (e) => {
+    currentButton?.addEventListener('click', e => {
       e.preventDefault();
       e.stopPropagation();
       this.toggleDropdown();
     });
-    
+
     // Close dropdown when clicking outside
-    document.addEventListener('click', (e) => {
+    document.addEventListener('click', e => {
       if (!this.container?.contains(e.target as Node)) {
         this.closeDropdown();
       }
     });
-    
+
     // Handle keyboard navigation
-    currentButton?.addEventListener('keydown', (e) => {
+    currentButton?.addEventListener('keydown', e => {
       switch (e.key) {
         case 'Enter':
         case ' ':
@@ -150,14 +182,14 @@ export class LanguageSelector {
           break;
       }
     });
-    
+
     // Handle dropdown keyboard navigation
-    this.dropdown?.addEventListener('keydown', (e) => {
+    this.dropdown?.addEventListener('keydown', e => {
       this.handleDropdownKeydown(e);
     });
-    
+
     // Listen for language changes from other sources
-    i18nService.onLanguageChange((language) => {
+    i18nService.onLanguageChange(language => {
       this.currentLanguage = language;
       this.updateCurrentLanguageButton(currentButton);
       this.createDropdownItems();
@@ -169,10 +201,14 @@ export class LanguageSelector {
    */
   private handleDropdownKeydown(e: KeyboardEvent): void {
     if (!this.dropdown) return;
-    
-    const items = Array.from(this.dropdown.querySelectorAll('.language-item')) as HTMLElement[];
-    const currentIndex = items.findIndex(item => item === document.activeElement);
-    
+
+    const items = Array.from(
+      this.dropdown.querySelectorAll('.language-item'),
+    ) as HTMLElement[];
+    const currentIndex = items.findIndex(
+      item => item === document.activeElement,
+    );
+
     switch (e.key) {
       case 'ArrowDown': {
         e.preventDefault();
@@ -180,31 +216,34 @@ export class LanguageSelector {
         items[nextIndex]?.focus();
         break;
       }
-        
+
       case 'ArrowUp': {
         e.preventDefault();
-        const prevIndex = currentIndex <= 0 ? items.length - 1 : currentIndex - 1;
+        const prevIndex =
+          currentIndex <= 0 ? items.length - 1 : currentIndex - 1;
         items[prevIndex]?.focus();
         break;
       }
-        
+
       case 'Enter':
       case ' ':
         e.preventDefault();
         (document.activeElement as HTMLElement)?.click();
         break;
-        
+
       case 'Escape':
         e.preventDefault();
         this.closeDropdown();
-        (this.container?.querySelector('.current-language-btn') as HTMLElement)?.focus();
+        (
+          this.container?.querySelector('.current-language-btn') as HTMLElement
+        )?.focus();
         break;
-        
+
       case 'Home':
         e.preventDefault();
         items[0]?.focus();
         break;
-        
+
       case 'End':
         e.preventDefault();
         items[items.length - 1]?.focus();
@@ -220,7 +259,7 @@ export class LanguageSelector {
       this.closeDropdown();
       return;
     }
-    
+
     try {
       // Track language change
       analyticsService.trackUserInteraction({
@@ -228,27 +267,30 @@ export class LanguageSelector {
         element: 'language_selector',
         value: language,
       });
-      
+
       // Change language
       await i18nService.changeLanguage(language);
       this.currentLanguage = language;
-      
+
       // Update UI
-      const currentButton = this.container?.querySelector('.current-language-btn') as HTMLElement;
+      const currentButton = this.container?.querySelector(
+        '.current-language-btn',
+      ) as HTMLElement;
       this.updateCurrentLanguageButton(currentButton);
       this.createDropdownItems();
-      
+
       // Close dropdown
       this.closeDropdown();
-      
+
       // Notify callback
       this.config.onLanguageChange?.(language);
-      
+
       // Dispatch custom event
-      document.dispatchEvent(new CustomEvent('language-changed', {
-        detail: { language, config: SUPPORTED_LANGUAGES[language] }
-      }));
-      
+      document.dispatchEvent(
+        new CustomEvent('language-changed', {
+          detail: { language, config: SUPPORTED_LANGUAGES[language] },
+        }),
+      );
     } catch (error) {
       console.error('Failed to change language:', error);
     }
@@ -270,11 +312,11 @@ export class LanguageSelector {
    */
   private openDropdown(): void {
     if (!this.dropdown || !this.container) return;
-    
+
     this.isOpen = true;
     this.dropdown.classList.add('open');
     this.container.classList.add('open');
-    
+
     const currentButton = this.container.querySelector('.current-language-btn');
     currentButton?.setAttribute('aria-expanded', 'true');
   }
@@ -284,11 +326,11 @@ export class LanguageSelector {
    */
   private closeDropdown(): void {
     if (!this.dropdown || !this.container) return;
-    
+
     this.isOpen = false;
     this.dropdown.classList.remove('open');
     this.container.classList.remove('open');
-    
+
     const currentButton = this.container.querySelector('.current-language-btn');
     currentButton?.setAttribute('aria-expanded', 'false');
   }
@@ -297,7 +339,9 @@ export class LanguageSelector {
    * Focus first dropdown item
    */
   private focusFirstItem(): void {
-    const firstItem = this.dropdown?.querySelector('.language-item') as HTMLElement;
+    const firstItem = this.dropdown?.querySelector(
+      '.language-item',
+    ) as HTMLElement;
     firstItem?.focus();
   }
 
@@ -549,19 +593,21 @@ export class LanguageSelector {
    */
   public updateConfig(config: Partial<LanguageSelectorConfig>): void {
     this.config = { ...this.config, ...config };
-    
+
     if (this.container) {
       // Remove old position class
       this.container.className = this.container.className.replace(
         /(top-left|top-right|bottom-left|bottom-right|center)/g,
-        ''
+        '',
       );
-      
+
       // Add new classes
       this.container.className += ` ${this.config.position} ${this.config.compact ? 'compact' : ''}`;
-      
+
       // Update button content
-      const currentButton = this.container.querySelector('.current-language-btn') as HTMLElement;
+      const currentButton = this.container.querySelector(
+        '.current-language-btn',
+      ) as HTMLElement;
       this.updateCurrentLanguageButton(currentButton);
       this.createDropdownItems();
     }

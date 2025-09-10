@@ -10,7 +10,7 @@ const createMockContext = (): Partial<CanvasRenderingContext2D> => ({
   textAlign: 'start',
   textBaseline: 'alphabetic',
   globalAlpha: 1,
-  
+
   // Drawing methods
   fillRect: vi.fn(),
   strokeRect: vi.fn(),
@@ -18,7 +18,7 @@ const createMockContext = (): Partial<CanvasRenderingContext2D> => ({
   fillText: vi.fn(),
   strokeText: vi.fn(),
   measureText: vi.fn(() => ({ width: 100 })),
-  
+
   // Path methods
   beginPath: vi.fn(),
   closePath: vi.fn(),
@@ -27,17 +27,17 @@ const createMockContext = (): Partial<CanvasRenderingContext2D> => ({
   arc: vi.fn(),
   fill: vi.fn(),
   stroke: vi.fn(),
-  
+
   // Transform methods
   save: vi.fn(),
   restore: vi.fn(),
   translate: vi.fn(),
   rotate: vi.fn(),
   scale: vi.fn(),
-  
+
   // Image methods
   drawImage: vi.fn(),
-  
+
   // Other methods
   setTransform: vi.fn(),
   resetTransform: vi.fn(),
@@ -70,7 +70,7 @@ global.Image = class {
   public height = 100;
   public onload: (() => void) | null = null;
   public onerror: (() => void) | null = null;
-  
+
   constructor() {
     // Simulate immediate load
     setTimeout(() => {
@@ -90,7 +90,7 @@ global.Audio = class {
   public play = vi.fn().mockResolvedValue(undefined);
   public pause = vi.fn();
   public load = vi.fn();
-  
+
   constructor(src?: string) {
     if (src) {
       this.src = src;
@@ -153,46 +153,48 @@ global.fetch = vi.fn();
 // Setup fetch mock for common API responses
 export const setupFetchMock = () => {
   const mockFetch = vi.mocked(fetch);
-  
+
   // Mock trivia categories response
   mockFetch.mockImplementation((url: string | Request | URL) => {
     const urlString = url.toString();
-    
+
     if (urlString.includes('api_category.php')) {
       return Promise.resolve({
         ok: true,
-        json: () => Promise.resolve({
-          trivia_categories: [
-            { id: 9, name: 'General Knowledge' },
-            { id: 17, name: 'Science & Nature' },
-            { id: 21, name: 'Sports' },
-          ],
-        }),
+        json: () =>
+          Promise.resolve({
+            trivia_categories: [
+              { id: 9, name: 'General Knowledge' },
+              { id: 17, name: 'Science & Nature' },
+              { id: 21, name: 'Sports' },
+            ],
+          }),
       } as Response);
     }
-    
+
     if (urlString.includes('api.php')) {
       return Promise.resolve({
         ok: true,
-        json: () => Promise.resolve({
-          response_code: 0,
-          results: [
-            {
-              category: 'General Knowledge',
-              type: 'multiple',
-              difficulty: 'medium',
-              question: 'What is the capital of France?',
-              correct_answer: 'Paris',
-              incorrect_answers: ['London', 'Berlin', 'Madrid'],
-            },
-          ],
-        }),
+        json: () =>
+          Promise.resolve({
+            response_code: 0,
+            results: [
+              {
+                category: 'General Knowledge',
+                type: 'multiple',
+                difficulty: 'medium',
+                question: 'What is the capital of France?',
+                correct_answer: 'Paris',
+                incorrect_answers: ['London', 'Berlin', 'Madrid'],
+              },
+            ],
+          }),
       } as Response);
     }
-    
+
     return Promise.reject(new Error('Unhandled URL'));
   });
-  
+
   return mockFetch;
 };
 

@@ -19,7 +19,7 @@
     "type-check": "tsc --noEmit",
     "prepare": "husky install",
     "precommit": "lint-staged",
-    "analyze": "vite-bundle-analyzer dist",
+    "analyze": "echo 'Bundle analysis would run: npx vite-bundle-analyzer dist' && ls -la dist/assets/",
     "lighthouse": "lighthouse http://localhost:4173 --output html --output-path ./lighthouse-report.html"
   },
   "repository": {

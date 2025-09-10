@@ -15,11 +15,11 @@ export function wrapText(
 
   // A simple approach to center the block of text vertically
   const lines: string[] = [];
-  
+
   for (const word of words) {
     const testLine = line + word + ' ';
     const metrics = context.measureText(testLine);
-    
+
     if (metrics.width > maxWidth && line.length > 0) {
       lines.push(line);
       line = word + ' ';
@@ -140,7 +140,7 @@ export function debounce<T extends (..._args: any[]) => void>(
   delay: number,
 ): (..._args: Parameters<T>) => void {
   let timeoutId: ReturnType<typeof setTimeout>;
-  
+
   return (..._args: Parameters<T>) => {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => func(..._args), delay);
@@ -155,7 +155,7 @@ export function throttle<T extends (..._args: any[]) => void>(
   delay: number,
 ): (..._args: Parameters<T>) => void {
   let lastCall = 0;
-  
+
   return (..._args: Parameters<T>) => {
     const now = Date.now();
     if (now - lastCall >= delay) {

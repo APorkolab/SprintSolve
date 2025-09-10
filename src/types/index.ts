@@ -13,7 +13,7 @@ export interface GameObject extends Position, Size {
   readonly type?: string;
   // eslint-disable-next-line no-unused-vars
   draw(ctx: CanvasRenderingContext2D, image?: HTMLImageElement): void;
-  // eslint-disable-next-line no-unused-vars  
+  // eslint-disable-next-line no-unused-vars
   update(gameSpeed: number): void;
 }
 
@@ -97,9 +97,20 @@ export interface DisplayMessage {
   color: string;
 }
 
-export type GameState = 'menu' | 'categorySelect' | 'playing' | 'paused' | 'gameOver';
+export type GameState =
+  | 'menu'
+  | 'categorySelect'
+  | 'playing'
+  | 'paused'
+  | 'gameOver';
 
-export type CollisionResult = 'correct' | 'incorrect' | 'wall' | 'ceiling' | 'floor' | null;
+export type CollisionResult =
+  | 'correct'
+  | 'incorrect'
+  | 'wall'
+  | 'ceiling'
+  | 'floor'
+  | null;
 
 export interface GameConfig {
   readonly initialGameSpeed: number;
@@ -130,7 +141,7 @@ export interface GameStateStore {
   hasShield: boolean;
   gameSpeed: number;
   selectedCategoryId: number | null;
-  
+
   // Actions
   // eslint-disable-next-line no-unused-vars
   setGameState: (state: GameState) => void;
@@ -146,7 +157,7 @@ export interface GameStateStore {
 }
 
 // Event types
-export type GameEvent = 
+export type GameEvent =
   | { type: 'JUMP' }
   | { type: 'COLLISION'; result: CollisionResult }
   | { type: 'POWERUP_COLLECTED'; powerupType: string }

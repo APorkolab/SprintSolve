@@ -56,7 +56,7 @@ export class AudioManagerImpl implements AudioManager {
   private musicVolume = 1.0;
   private muted = false;
   private initialized = false;
-  
+
   constructor() {
     this.init();
   }
@@ -69,10 +69,10 @@ export class AudioManagerImpl implements AudioManager {
       // Set global Howler settings
       Howler.volume(this.masterVolume);
       (Howler as any).html5PoolSize(10);
-      
+
       // Preload essential sounds
       await this.preloadEssentialSounds();
-      
+
       this.initialized = true;
       // eslint-disable-next-line no-console
       console.debug('Audio system initialized');
@@ -108,10 +108,10 @@ export class AudioManagerImpl implements AudioManager {
     }
 
     const config = AUDIO_ASSETS[key];
-    
-    const loadingPromise = new Promise<void>((resolve) => {
+
+    const loadingPromise = new Promise<void>(resolve => {
       const sound = new Howl({
-        ...config as any,
+        ...(config as any),
         onload: () => {
           this.sounds.set(key, sound);
           this.loadingPromises.delete(key);
@@ -139,9 +139,9 @@ export class AudioManagerImpl implements AudioManager {
    * Play a sound with volume control
    */
   private async playSound(
-    key: AudioAssetKey, 
+    key: AudioAssetKey,
     volume?: number,
-    options?: { rate?: number; loop?: boolean }
+    options?: { rate?: number; loop?: boolean },
   ): Promise<void> {
     if (this.muted) return;
 
@@ -153,10 +153,11 @@ export class AudioManagerImpl implements AudioManager {
       const config = AUDIO_ASSETS[key];
       const isMusicTrack = key === 'background';
       const volumeMultiplier = isMusicTrack ? this.musicVolume : this.sfxVolume;
-      const finalVolume = (volume ?? config.volume) * volumeMultiplier * this.masterVolume;
+      const finalVolume =
+        (volume ?? config.volume) * volumeMultiplier * this.masterVolume;
 
       sound.volume(Math.max(0, Math.min(1, finalVolume)));
-      
+
       if (options?.rate) sound.rate(options.rate);
       if (options?.loop !== undefined) sound.loop(options.loop);
 
@@ -231,7 +232,7 @@ export class AudioManagerImpl implements AudioManager {
    */
   public setMusicVolume(volume: number): void {
     this.musicVolume = Math.max(0, Math.min(1, volume));
-    
+
     // Update background music volume if playing
     const bgMusic = this.sounds.get('background');
     if (bgMusic) {
@@ -383,14 +384,15 @@ export class SpatialAudioManager {
 
   private async initializeAudioContext(): Promise<void> {
     try {
-      this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      this.audioContext = new (window.AudioContext ||
+        (window as any).webkitAudioContext)();
       this.gainNode = this.audioContext.createGain();
       this.compressor = this.audioContext.createDynamicsCompressor();
 
       // Create audio processing chain
       this.gainNode.connect(this.compressor);
       this.compressor.connect(this.audioContext.destination);
-      
+
       // Configure compressor for game audio
       this.compressor.threshold.value = -50;
       this.compressor.knee.value = 30;

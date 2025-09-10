@@ -6,14 +6,14 @@ import type { GameAssets } from '@/types';
 function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img = new Image();
-    
+
     img.onload = () => resolve(img);
-    img.onerror = (error) => {
+    img.onerror = error => {
       // eslint-disable-next-line no-console
       console.error(`Failed to load image: ${src}`, error);
       reject(new Error(`Failed to load image: ${src}`));
     };
-    
+
     img.src = src;
   });
 }
@@ -42,7 +42,9 @@ export async function loadGameAssets(): Promise<GameAssets> {
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Failed to load game assets:', error);
-    throw new Error('Failed to load game assets. Please refresh and try again.');
+    throw new Error(
+      'Failed to load game assets. Please refresh and try again.',
+    );
   }
 }
 
@@ -55,23 +57,23 @@ export function preloadAsset(
 ): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img = new Image();
-    
+
     if (onProgress) {
-      img.addEventListener('progress', (event) => {
+      img.addEventListener('progress', event => {
         if (event.lengthComputable && onProgress) {
           const progressValue = (event.loaded / event.total) * 100;
           onProgress(progressValue);
         }
       });
     }
-    
+
     img.onload = () => resolve(img);
-    img.onerror = (error) => {
+    img.onerror = error => {
       // eslint-disable-next-line no-console
       console.error(`Failed to preload asset: ${src}`, error);
       reject(new Error(`Failed to preload asset: ${src}`));
     };
-    
+
     img.src = src;
   });
 }
@@ -86,22 +88,22 @@ export function createFallbackImage(
 ): HTMLImageElement {
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d')!;
-  
+
   canvas.width = width;
   canvas.height = height;
-  
+
   ctx.fillStyle = color;
   ctx.fillRect(0, 0, width, height);
-  
+
   ctx.fillStyle = '#FFFFFF';
   ctx.font = '12px Arial';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillText('?', width / 2, height / 2);
-  
+
   const img = new Image();
   img.src = canvas.toDataURL();
-  
+
   return img;
 }
 
@@ -110,7 +112,10 @@ export function createFallbackImage(
  */
 export class AssetManager {
   private readonly cache = new Map<string, HTMLImageElement>();
-  private readonly loadingPromises = new Map<string, Promise<HTMLImageElement>>();
+  private readonly loadingPromises = new Map<
+    string,
+    Promise<HTMLImageElement>
+  >();
 
   /**
    * Loads an asset with caching
@@ -144,7 +149,9 @@ export class AssetManager {
   /**
    * Preloads multiple assets
    */
-  public async preloadAll(sources: readonly string[]): Promise<HTMLImageElement[]> {
+  public async preloadAll(
+    sources: readonly string[],
+  ): Promise<HTMLImageElement[]> {
     return Promise.all(sources.map(src => this.load(src)));
   }
 

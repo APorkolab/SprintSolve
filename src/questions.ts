@@ -16,7 +16,8 @@ class QuestionState implements Question {
 
   public update(question: Partial<Question>): void {
     if (question.text !== undefined) this.text = question.text;
-    if (question.correctAnswer !== undefined) this.correctAnswer = question.correctAnswer;
+    if (question.correctAnswer !== undefined)
+      this.correctAnswer = question.correctAnswer;
     if (question.answers !== undefined) this.answers = [...question.answers];
     if (question.display !== undefined) this.display = question.display;
   }
@@ -68,8 +69,8 @@ export class TriviaService {
     answers: string[];
     correct_answer: number;
   } {
-    const incorrectAnswers = apiQuestion.incorrect_answers.map(answer => 
-      this.decodeHtml(answer)
+    const incorrectAnswers = apiQuestion.incorrect_answers.map(answer =>
+      this.decodeHtml(answer),
     );
     const correctAnswer = this.decodeHtml(apiQuestion.correct_answer);
 
@@ -95,21 +96,23 @@ export class TriviaService {
 
     try {
       const response = await fetch(url);
-      
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.json() as T;
-      
+      const data = (await response.json()) as T;
+
       // Cache the response
       this.cache.set(cacheKey, { data, timestamp: Date.now() });
-      
+
       return data;
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(`Failed to fetch from ${url}:`, error);
-      throw new Error(`Failed to fetch data: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Failed to fetch data: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      );
     }
   }
 
@@ -118,11 +121,10 @@ export class TriviaService {
    */
   public async loadCategories(): Promise<TriviaCategory[]> {
     try {
-      const response = await this.fetchWithCache<{ trivia_categories: TriviaCategory[] }>(
-        `${this.baseUrl}/api_category.php`,
-        'categories'
-      );
-      
+      const response = await this.fetchWithCache<{
+        trivia_categories: TriviaCategory[];
+      }>(`${this.baseUrl}/api_category.php`, 'categories');
+
       return response.trivia_categories;
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -146,14 +148,16 @@ export class TriviaService {
     try {
       const difficultyParam = difficulty ? `&difficulty=${difficulty}` : '';
       const url = `${this.baseUrl}/api.php?amount=1&category=${categoryId}&type=multiple${difficultyParam}`;
-      
+
       const response = await this.fetchWithCache<TriviaApiResponse>(
         url,
-        `question_${categoryId}_${difficulty || 'any'}`
+        `question_${categoryId}_${difficulty || 'any'}`,
       );
 
       if (response.response_code !== 0) {
-        throw new Error(`API returned response code: ${response.response_code}`);
+        throw new Error(
+          `API returned response code: ${response.response_code}`,
+        );
       }
 
       if (response.results.length === 0) {
@@ -176,7 +180,7 @@ export class TriviaService {
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error('Error fetching question:', error);
-      
+
       // Return fallback question
       const fallbackQuestion: Question = {
         text: 'Error loading question. Please try again.',
@@ -201,14 +205,16 @@ export class TriviaService {
     try {
       const difficultyParam = difficulty ? `&difficulty=${difficulty}` : '';
       const url = `${this.baseUrl}/api.php?amount=${amount}&category=${categoryId}&type=multiple${difficultyParam}`;
-      
+
       const response = await this.fetchWithCache<TriviaApiResponse>(
         url,
-        `questions_${categoryId}_${amount}_${difficulty || 'any'}`
+        `questions_${categoryId}_${amount}_${difficulty || 'any'}`,
       );
 
       if (response.response_code !== 0) {
-        throw new Error(`API returned response code: ${response.response_code}`);
+        throw new Error(
+          `API returned response code: ${response.response_code}`,
+        );
       }
 
       return response.results.map(apiQuestion => {
@@ -326,13 +332,13 @@ export class QuestionQueue {
    */
   public async next(): Promise<Question | null> {
     await this.ensureQuestions();
-    
+
     const question = this.queue.shift();
     if (!question) return null;
 
     // Update global state
     questionState.update({ ...question, display: true });
-    
+
     // Preload more questions in background
     this.ensureQuestions().catch(error => {
       // eslint-disable-next-line no-console

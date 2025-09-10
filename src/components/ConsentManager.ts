@@ -41,7 +41,7 @@ export class ConsentManager {
     const hasConsent = localStorage.getItem('consent_preferences');
     const consentVersion = localStorage.getItem('consent_version');
     const currentVersion = '1.0'; // Update this when privacy policy changes
-    
+
     return !hasConsent || consentVersion !== currentVersion;
   }
 
@@ -53,7 +53,7 @@ export class ConsentManager {
     if (saved) {
       return JSON.parse(saved);
     }
-    
+
     return {
       necessary: true, // Always required
       analytics: false,
@@ -69,7 +69,7 @@ export class ConsentManager {
     localStorage.setItem('consent_preferences', JSON.stringify(preferences));
     localStorage.setItem('consent_version', '1.0');
     localStorage.setItem('consent_timestamp', Date.now().toString());
-    
+
     this.currentPreferences = preferences;
     this.applyConsent();
   }
@@ -80,22 +80,24 @@ export class ConsentManager {
   private applyConsent(): void {
     // Apply analytics consent
     analyticsService.updateConsent(this.currentPreferences.analytics);
-    
+
     // Initialize analytics if consent given
     if (this.currentPreferences.analytics) {
       analyticsService.initialize({
         userConsent: true,
       });
     }
-    
+
     // Apply other consents (marketing, preferences, etc.)
     this.applyMarketingConsent(this.currentPreferences.marketing);
     this.applyPreferencesConsent(this.currentPreferences.preferences);
-    
+
     // Dispatch event for other parts of the app
-    document.dispatchEvent(new CustomEvent('consent-updated', {
-      detail: this.currentPreferences,
-    }));
+    document.dispatchEvent(
+      new CustomEvent('consent-updated', {
+        detail: this.currentPreferences,
+      }),
+    );
   }
 
   /**
@@ -149,9 +151,9 @@ export class ConsentManager {
 
     this.addConsentStyles();
     this.attachConsentEvents();
-    
+
     document.body.appendChild(this.consentBanner);
-    
+
     // Show with animation
     setTimeout(() => {
       this.consentBanner?.classList.add('show');
@@ -165,7 +167,9 @@ export class ConsentManager {
     if (!this.consentBanner) return;
 
     const acceptAllBtn = this.consentBanner.querySelector('.btn-accept-all');
-    const acceptNecessaryBtn = this.consentBanner.querySelector('.btn-accept-necessary');
+    const acceptNecessaryBtn = this.consentBanner.querySelector(
+      '.btn-accept-necessary',
+    );
     const preferencesBtn = this.consentBanner.querySelector('.btn-preferences');
 
     acceptAllBtn?.addEventListener('click', () => {
@@ -281,7 +285,7 @@ export class ConsentManager {
 
     this.attachPreferencesEvents();
     document.body.appendChild(this.preferencesModal);
-    
+
     // Show with animation
     setTimeout(() => {
       this.preferencesModal?.classList.add('show');
@@ -303,17 +307,23 @@ export class ConsentManager {
 
     closeBtn?.addEventListener('click', closeModal);
     cancelBtn?.addEventListener('click', closeModal);
-    
-    overlay?.addEventListener('click', (e) => {
+
+    overlay?.addEventListener('click', e => {
       if (e.target === overlay) {
         closeModal();
       }
     });
 
     saveBtn?.addEventListener('click', () => {
-      const analyticsCheckbox = this.preferencesModal?.querySelector('#analytics-consent') as HTMLInputElement;
-      const marketingCheckbox = this.preferencesModal?.querySelector('#marketing-consent') as HTMLInputElement;
-      const preferencesCheckbox = this.preferencesModal?.querySelector('#preferences-consent') as HTMLInputElement;
+      const analyticsCheckbox = this.preferencesModal?.querySelector(
+        '#analytics-consent',
+      ) as HTMLInputElement;
+      const marketingCheckbox = this.preferencesModal?.querySelector(
+        '#marketing-consent',
+      ) as HTMLInputElement;
+      const preferencesCheckbox = this.preferencesModal?.querySelector(
+        '#preferences-consent',
+      ) as HTMLInputElement;
 
       const preferences: ConsentPreferences = {
         necessary: true,
@@ -641,14 +651,14 @@ export class ConsentManager {
     localStorage.removeItem('consent_preferences');
     localStorage.removeItem('consent_version');
     localStorage.removeItem('consent_timestamp');
-    
+
     this.currentPreferences = {
       necessary: true,
       analytics: false,
       marketing: false,
       preferences: false,
     };
-    
+
     this.createConsentBanner();
   }
 }
