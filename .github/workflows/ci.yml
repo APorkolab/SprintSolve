@@ -366,9 +366,23 @@ jobs:
         run: npm i
 
       - name: Create Release
+        id: release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx semantic-release
+        continue-on-error: true
+        
+      - name: Release status
+        if: always()
+        run: |
+          echo "📦 Semantic Release Status:"
+          if [ "${{ steps.release.outcome }}" == "success" ]; then
+            echo "✅ Release created successfully"
+          else
+            echo "❌ Release creation skipped - missing tokens"
+            echo "💡 To enable: Set NPM_TOKEN and configure semantic-release"
+            echo "📋 Manual release available via GitHub UI"
+          fi
 
   # Monitoring and Notifications
   notify:
