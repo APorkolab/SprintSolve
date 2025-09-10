@@ -51,7 +51,7 @@ export async function loadGameAssets(): Promise<GameAssets> {
  */
 export function preloadAsset(
   src: string,
-  onProgress?: (progressValue?: number) => void,
+  onProgress?: (_progress?: number) => void,
 ): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img = new Image();

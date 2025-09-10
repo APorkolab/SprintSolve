@@ -44,15 +44,15 @@
   },
   "homepage": "https://github.com/APorkolab/SprintSolve#readme",
   "dependencies": {
-    "zustand": "^4.4.7",
     "canvas-confetti": "^1.9.2",
-    "howler": "^2.2.4",
-    "lodash-es": "^4.17.21",
     "gtag": "^1.0.1",
-    "uuid": "^9.0.1",
+    "howler": "^2.2.4",
     "i18next": "^23.7.8",
     "i18next-browser-languagedetector": "^7.2.0",
-    "i18next-http-backend": "^2.4.2"
+    "i18next-http-backend": "^2.4.2",
+    "lodash-es": "^4.17.21",
+    "uuid": "^9.0.1",
+    "zustand": "^4.4.7"
   },
   "devDependencies": {
     "@playwright/test": "^1.40.1",
@@ -74,7 +74,8 @@
     "eslint-plugin-security": "^1.7.1",
     "happy-dom": "^18.0.1",
     "husky": "^8.0.3",
-    "lighthouse": "^12.8.2",
+    "jsdom": "^26.1.0",
+    "lighthouse": "^11.4.0",
     "lint-staged": "^15.2.0",
     "postcss": "^8.4.32",
     "prettier": "^3.1.1",

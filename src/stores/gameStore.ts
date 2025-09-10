@@ -33,14 +33,14 @@ interface GameStoreState extends GameStateStore {
   };
 
   // Extended actions
-  setLives: (lives: number) => void;
+  setLives: (_lives: number) => void;
   decrementLives: () => void;
-  setLevel: (level: number) => void;
+  setLevel: (_level: number) => void;
   incrementLevel: () => void;
-  addExperience: (xp: number) => void;
-  unlockAchievement: (achievement: string) => void;
-  updateSettings: (settings: Partial<GameStoreState['settings']>) => void;
-  updateStatistics: (stats: Partial<GameStoreState['statistics']>) => void;
+  addExperience: (_xp: number) => void;
+  unlockAchievement: (_achievement: string) => void;
+  updateSettings: (_settings: Partial<GameStoreState['settings']>) => void;
+  updateStatistics: (_stats: Partial<GameStoreState['statistics']>) => void;
   resetStatistics: () => void;
 }
 
@@ -171,8 +171,8 @@ export const useGameStore = create<GameStoreState>()(
         },
 
         // Extended actions
-        setLives: (lives: number) => {
-          set({ lives: Math.max(0, lives) });
+        setLives: (_lives: number) => {
+          set({ lives: Math.max(0, _lives) });
         },
 
         decrementLives: () => {
@@ -184,8 +184,8 @@ export const useGameStore = create<GameStoreState>()(
           }
         },
 
-        setLevel: (level: number) => {
-          set({ level: Math.max(1, level) });
+        setLevel: (_level: number) => {
+          set({ level: Math.max(1, _level) });
         },
 
         incrementLevel: () => {
@@ -194,8 +194,8 @@ export const useGameStore = create<GameStoreState>()(
           get().unlockAchievement(`level_${newLevel}`);
         },
 
-        addExperience: (xp: number) => {
-          const newXP = get().experience + xp;
+        addExperience: (_xp: number) => {
+          const newXP = get().experience + _xp;
           set({ experience: newXP });
           
           // Check for level up
@@ -205,27 +205,27 @@ export const useGameStore = create<GameStoreState>()(
           }
         },
 
-        unlockAchievement: (achievement: string) => {
+        unlockAchievement: (_achievement: string) => {
           const achievements = get().achievements;
-          if (!achievements.includes(achievement)) {
-            set({ achievements: [...achievements, achievement] });
+          if (!achievements.includes(_achievement)) {
+            set({ achievements: [...achievements, _achievement] });
           }
         },
 
-        updateSettings: (newSettings) => {
+        updateSettings: (_settings: Partial<GameStoreState['settings']>) => {
           set({
             settings: {
               ...get().settings,
-              ...newSettings,
+              ..._settings,
             },
           });
         },
 
-        updateStatistics: (newStats) => {
+        updateStatistics: (_stats: Partial<GameStoreState['statistics']>) => {
           set({
             statistics: {
               ...get().statistics,
-              ...newStats,
+              ..._stats,
             },
           });
         },

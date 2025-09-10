@@ -151,8 +151,10 @@ class I18nService {
       this.isInitialized = true;
       this.currentLanguage = (i18n.language as SupportedLanguage) || 'en';
       this.applyTextDirection();
+      // eslint-disable-next-line no-console
       console.log(`I18n initialized with language: ${this.currentLanguage}`);
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Failed to initialize i18n:', error);
       this.isInitialized = true;
     }
@@ -169,8 +171,10 @@ class I18nService {
       this.applyTextDirection();
       localStorage.setItem('i18n_language', language);
       this.changeListeners.forEach(listener => listener(language));
+      // eslint-disable-next-line no-console
       console.log(`Language changed to: ${language}`);
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Failed to change language:', error);
     }
   }

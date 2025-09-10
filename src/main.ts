@@ -412,7 +412,8 @@ class GameEngine {
    * Update game logic
    */
   private update(deltaTime: number): void {
-    // deltaTime is available for future use in frame-rate dependent calculations
+    // deltaTime parameter reserved for future use in frame-rate dependent calculations
+    void deltaTime; // Acknowledge parameter for future use
     if (!this.assets) return;
 
     switch (this.gameStore.gameState) {

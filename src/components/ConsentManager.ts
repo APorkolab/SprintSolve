@@ -104,8 +104,10 @@ export class ConsentManager {
   private applyMarketingConsent(enabled: boolean): void {
     // Placeholder for marketing tools (social media pixels, etc.)
     if (enabled) {
+      // eslint-disable-next-line no-console
       console.log('Marketing consent granted');
     } else {
+      // eslint-disable-next-line no-console
       console.log('Marketing consent denied');
     }
   }
@@ -116,8 +118,10 @@ export class ConsentManager {
   private applyPreferencesConsent(enabled: boolean): void {
     // Placeholder for preference-based features
     if (enabled) {
+      // eslint-disable-next-line no-console
       console.log('Preferences consent granted');
     } else {
+      // eslint-disable-next-line no-console
       console.log('Preferences consent denied');
     }
   }

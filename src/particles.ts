@@ -191,6 +191,7 @@ export class ParticleSystem {
   ): void {
     const pool = this.pools.get(poolName);
     if (!pool) {
+      // eslint-disable-next-line no-console
       console.warn(`Particle pool '${poolName}' not found`);
       return;
     }

@@ -107,6 +107,7 @@ export class TriviaService {
       
       return data;
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(`Failed to fetch from ${url}:`, error);
       throw new Error(`Failed to fetch data: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
@@ -124,6 +125,7 @@ export class TriviaService {
       
       return response.trivia_categories;
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Error loading categories:', error);
       // Return default categories as fallback
       return [
@@ -172,6 +174,7 @@ export class TriviaService {
 
       return question;
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Error fetching question:', error);
       
       // Return fallback question
@@ -218,6 +221,7 @@ export class TriviaService {
         };
       });
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Error fetching multiple questions:', error);
       return [];
     }
@@ -271,6 +275,7 @@ export class TriviaService {
     try {
       await this.fetchMultipleQuestions(categoryId, amount);
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.warn('Failed to preload questions:', error);
     }
   }
@@ -298,7 +303,11 @@ export class QuestionQueue {
   constructor(
     private readonly categoryId: number,
     private readonly difficulty?: 'easy' | 'medium' | 'hard',
-  ) {}
+  ) {
+    // Parameters are stored as class properties for use in methods
+    void this.categoryId; // Acknowledge parameter storage
+    void this.difficulty; // Acknowledge parameter storage  
+  }
 
   /**
    * Ensures the queue has questions
@@ -328,6 +337,7 @@ export class QuestionQueue {
     
     // Preload more questions in background
     this.ensureQuestions().catch(error => {
+      // eslint-disable-next-line no-console
       console.warn('Failed to preload questions:', error);
     });
 
