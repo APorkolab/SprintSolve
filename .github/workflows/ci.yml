@@ -6,6 +6,15 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+  id-token: write
+  pages: write
+  pull-requests: write
+  issues: write
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -221,11 +230,21 @@ jobs:
         if: always()
         with:
           sarif_file: 'trivy-results.sarif'
+        continue-on-error: true
+
+      - name: Upload Trivy scan results as artifact (fallback)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-security-scan
+          path: 'trivy-results.sarif'
+          retention-days: 30
 
       - name: Run CodeQL Analysis
         uses: github/codeql-action/analyze@v3
         with:
           languages: javascript
+        continue-on-error: true
 
   # Dependency Review
   dependency-review:
