@@ -135,32 +135,32 @@ export function formatTime(seconds: number): string {
 /**
  * Debounce function
  */
-export function debounce<T extends (...args: any[]) => void>(
+export function debounce<T extends (..._args: any[]) => void>(
   func: T,
   delay: number,
-): (...args: Parameters<T>) => void {
+): (..._args: Parameters<T>) => void {
   let timeoutId: ReturnType<typeof setTimeout>;
   
-  return (...args: Parameters<T>) => {
+  return (..._args: Parameters<T>) => {
     clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => func(...args), delay);
+    timeoutId = setTimeout(() => func(..._args), delay);
   };
 }
 
 /**
  * Throttle function
  */
-export function throttle<T extends (...args: any[]) => void>(
+export function throttle<T extends (..._args: any[]) => void>(
   func: T,
   delay: number,
-): (...args: Parameters<T>) => void {
+): (..._args: Parameters<T>) => void {
   let lastCall = 0;
   
-  return (...args: Parameters<T>) => {
+  return (..._args: Parameters<T>) => {
     const now = Date.now();
     if (now - lastCall >= delay) {
       lastCall = now;
-      func(...args);
+      func(..._args);
     }
   };
 }

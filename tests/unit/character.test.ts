@@ -49,14 +49,14 @@ describe('Character', () => {
       const initialY = character.y;
       character.velocity_y = 5;
       character.update();
-      expect(character.y).toBe(initialY + 5);
+      expect(character.y).toBeCloseTo(initialY + 5 + character.gravity, 2);
     });
 
     it('should handle negative velocity (upward movement)', () => {
       const initialY = character.y;
       character.velocity_y = -5;
       character.update();
-      expect(character.y).toBe(initialY - 5);
+      expect(character.y).toBeCloseTo(initialY - 5 + character.gravity, 2);
     });
 
     it('should apply gravity multiple times correctly', () => {

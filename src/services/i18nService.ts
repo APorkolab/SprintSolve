@@ -116,7 +116,7 @@ export interface I18nConfig {
 class I18nService {
   private currentLanguage: SupportedLanguage = 'en';
   private isInitialized = false;
-  private changeListeners: Set<(language: SupportedLanguage) => void> = new Set();
+  private changeListeners: Set<(_language: SupportedLanguage) => void> = new Set();
 
   constructor() {
     this.currentLanguage = this.detectLanguage();
@@ -227,7 +227,7 @@ class I18nService {
     }
   }
 
-  public onLanguageChange(callback: (language: SupportedLanguage) => void): () => void {
+  public onLanguageChange(callback: (_language: SupportedLanguage) => void): () => void {
     this.changeListeners.add(callback);
     return () => this.changeListeners.delete(callback);
   }

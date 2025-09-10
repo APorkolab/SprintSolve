@@ -99,7 +99,7 @@ global.Audio = class {
 } as any;
 
 // Mock requestAnimationFrame
-global.requestAnimationFrame = vi.fn((callback: (time: number) => void) => {
+global.requestAnimationFrame = vi.fn((callback: (_time: number) => void) => {
   setTimeout(() => callback(performance.now()), 16);
   return 1;
 });

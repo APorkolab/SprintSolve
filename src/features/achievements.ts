@@ -26,8 +26,7 @@ interface AchievementDefinition {
   readonly rarity: Achievement['rarity'];
   readonly hidden: boolean;
   readonly category: Achievement['category'];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  readonly condition: (stats: any, progress: any) => { achieved: boolean; progress: number; target: number };
+  readonly condition: (_stats: any, _progress?: any) => { achieved: boolean; progress: number; target: number };
 }
 
 /**
@@ -35,7 +34,7 @@ interface AchievementDefinition {
  */
 export class AchievementSystem {
   private readonly achievements: Map<string, AchievementDefinition> = new Map();
-  private readonly eventListeners: Map<string, ((event: GameEvent) => void)[]> = new Map();
+  private readonly eventListeners: Map<string, ((_event: GameEvent) => void)[]> = new Map();
   private progressData: Record<string, any> = {};
 
   constructor() {
@@ -431,7 +430,7 @@ export class AchievementSystem {
   /**
    * Add event listener for achievement tracking
    */
-  public addEventListener(eventType: string, callback: (event: GameEvent) => void): void {
+  public addEventListener(eventType: string, callback: (_event: GameEvent) => void): void {
     if (!this.eventListeners.has(eventType)) {
       this.eventListeners.set(eventType, []);
     }

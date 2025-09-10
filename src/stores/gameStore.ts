@@ -171,8 +171,8 @@ export const useGameStore = create<GameStoreState>()(
         },
 
         // Extended actions
-        setLives: (_lives: number) => {
-          set({ lives: Math.max(0, _lives) });
+        setLives: (lives: number) => {
+          set({ lives: Math.max(0, lives) });
         },
 
         decrementLives: () => {
@@ -184,8 +184,8 @@ export const useGameStore = create<GameStoreState>()(
           }
         },
 
-        setLevel: (_level: number) => {
-          set({ level: Math.max(1, _level) });
+        setLevel: (level: number) => {
+          set({ level: Math.max(1, level) });
         },
 
         incrementLevel: () => {
@@ -194,8 +194,8 @@ export const useGameStore = create<GameStoreState>()(
           get().unlockAchievement(`level_${newLevel}`);
         },
 
-        addExperience: (_xp: number) => {
-          const newXP = get().experience + _xp;
+        addExperience: (xp: number) => {
+          const newXP = get().experience + xp;
           set({ experience: newXP });
           
           // Check for level up
@@ -205,27 +205,27 @@ export const useGameStore = create<GameStoreState>()(
           }
         },
 
-        unlockAchievement: (_achievement: string) => {
+        unlockAchievement: (achievement: string) => {
           const achievements = get().achievements;
-          if (!achievements.includes(_achievement)) {
-            set({ achievements: [...achievements, _achievement] });
+          if (!achievements.includes(achievement)) {
+            set({ achievements: [...achievements, achievement] });
           }
         },
 
-        updateSettings: (_settings: Partial<GameStoreState['settings']>) => {
+        updateSettings: (settings: Partial<GameStoreState['settings']>) => {
           set({
             settings: {
               ...get().settings,
-              ..._settings,
+              ...settings,
             },
           });
         },
 
-        updateStatistics: (_stats: Partial<GameStoreState['statistics']>) => {
+        updateStatistics: (stats: Partial<GameStoreState['statistics']>) => {
           set({
             statistics: {
               ...get().statistics,
-              ..._stats,
+              ...stats,
             },
           });
         },

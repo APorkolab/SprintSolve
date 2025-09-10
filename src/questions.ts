@@ -301,12 +301,10 @@ export class QuestionQueue {
   private readonly maxSize = 5;
 
   constructor(
-    private readonly categoryId: number,
-    private readonly difficulty?: 'easy' | 'medium' | 'hard',
+    private readonly _categoryId: number,
+    private readonly _difficulty?: 'easy' | 'medium' | 'hard',
   ) {
     // Parameters are stored as class properties for use in methods
-    void this.categoryId; // Acknowledge parameter storage
-    void this.difficulty; // Acknowledge parameter storage  
   }
 
   /**
@@ -315,9 +313,9 @@ export class QuestionQueue {
   public async ensureQuestions(): Promise<void> {
     if (this.queue.length < 2) {
       const questions = await triviaService.fetchMultipleQuestions(
-        this.categoryId,
+        this._categoryId,
         this.maxSize - this.queue.length,
-        this.difficulty,
+        this._difficulty,
       );
       this.queue.push(...questions);
     }

@@ -5,6 +5,8 @@ export default defineConfig({
   test: {
     environment: 'happy-dom',
     globals: true,
+    include: ['tests/unit/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}', 'src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+    exclude: ['tests/e2e/**/*', '**/*.e2e.*'],
     setupFiles: ['./src/test/setup.ts'],
     coverage: {
       provider: 'v8',
